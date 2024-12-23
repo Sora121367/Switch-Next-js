@@ -1,5 +1,6 @@
+"use client";
 import React, { useState } from "react";
-import AddProductDiscount from "./AddProductDiscount";
+import AddProductDiscount from "@/components/seller-components/Discounts/AddProductDiscount";
 
 const DiscountProduct = () => {
   const [products, setProducts] = useState([

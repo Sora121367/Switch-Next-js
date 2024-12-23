@@ -1,9 +1,10 @@
+"use client";
 import React from "react";
 import { useState } from "react";
 import { AiOutlineMessage } from "react-icons/ai";
 import { AiOutlineShop } from "react-icons/ai";
-import { messages } from "./constants";
-import Link  from "next/link";
+import { messages } from "@/components/seller-components/constants";
+import Link from 'next/link';
 
 import { IoIosInformationCircle } from "react-icons/io";
 import { MdKeyboardVoice } from "react-icons/md";
@@ -74,7 +75,7 @@ const Messages = () => {
               return (
                 <Link
                   key={message.id}
-                  to={`/messages/${message.id}`}
+                  href={`/messages/${message.id}`}
                   className="flex items-center gap-2 p-3 rounded-lg hover:bg-gray-100 transition"
                 >
                   {/* Profile Image */}
@@ -107,7 +108,7 @@ const Messages = () => {
           <div className="h-[3.5rem] px-8 flex items-center justify-between bg-slate-300/25 gap-3">
             <div className="flex gap-2">
               <img
-                src="src/assets/image10.png"
+                src="/image10.png"
                 alt="profile"
                 className="w-[2.8rem]  rounded-full z-10 cursor-pointer"
               />
@@ -126,7 +127,7 @@ const Messages = () => {
           <div className="flex-1 overflow-x-hidden overflow-y-auto mb-4">
             <div className="flex  items-center justify-center flex-col py-10">
               <img
-                src="src/assets/image10.png"
+                src="/image10.png"
                 alt="profile"
                 className="w-[3.8rem]  rounded-full z-10 cursor-pointer"
               />
@@ -141,7 +142,7 @@ const Messages = () => {
               {/* Left Message */}
               <div className="relative left-2 flex items-center gap-3">
                 <img
-                  src="src/assets/image10.png"
+                  src="/image10.png"
                   alt="profile"
                   className="w-[1.7rem] rounded-full z-10 cursor-pointer"
                 />
@@ -165,7 +166,7 @@ const Messages = () => {
                 </div>
 
                 <img
-                  src="src/assets/image10.png"
+                  src="/image10.png"
                   alt="profile"
                   className="w-[1.7rem] rounded-full z-10 cursor-pointer"
                 />

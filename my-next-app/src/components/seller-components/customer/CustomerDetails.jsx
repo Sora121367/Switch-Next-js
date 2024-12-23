@@ -1,24 +1,25 @@
+"use client";
 import React, { useState } from "react";
 import { IoChevronBackOutline } from "react-icons/io5";
 
 const CustomerDetails = ({ onBack }) => {
   const products = [
     {
-      src: "src/assets/image8.png",
+      src: "/image8.png",
       name: "Vintage T-Shirts: A Timeless Retro Look",
       size: "M",
       price: "$10.00",
       quantity: 1,
     },
     {
-      src: "src/assets/image8.png",
+      src: "/image8.png",
       name: "Flowers T-shirt: The Real Man",
       size: "L",
       price: "$20.00",
       quantity: 3,
     },
     {
-      src: "src/assets/image8.png",
+      src: "/image8.png",
       name: "Swag 1999 Timeless Retro Look",
       size: "XL",
       price: "$15.00",
@@ -162,7 +163,7 @@ const CustomerDetails = ({ onBack }) => {
       <div className=" absolute top-[4.5rem] right-10 w-80 bg-white p-6 rounded-xl shadow-md">
         <div className="flex items-center gap-2 mb-6">
           <img
-            src="src/assets/image10.png"
+            src="/image10.png"
             alt="Customer Avatar"
             className="w-16 h-16 rounded-full border border-gray-300"
           />

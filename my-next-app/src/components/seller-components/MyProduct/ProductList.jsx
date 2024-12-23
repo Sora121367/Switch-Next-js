@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { TbTruckDelivery, TbDots } from "react-icons/tb";
 import ButtonSwitch from "./ButtonSwitch";

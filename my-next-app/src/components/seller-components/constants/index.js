@@ -23,7 +23,7 @@ export const navLinks = [
       price: "$120",
       inStock: true,
       requiresDelivery: true,
-      img: "src/assets/image8.png",
+      img: "/image8.png",
     },
     {
       id: 2,
@@ -31,7 +31,7 @@ export const navLinks = [
       price: "$15",
       inStock: true,
       requiresDelivery: true,
-      img: "src/assets/image8.png",
+      img: "/image8.png",
     },
     {
       id: 3,
@@ -39,7 +39,7 @@ export const navLinks = [
       price: "$123",
       inStock: true,
       requiresDelivery: true,
-      img: "src/assets/image8.png",
+      img: "/image8.png",
     },
     {
       id: 4,
@@ -47,7 +47,7 @@ export const navLinks = [
       price: "$10",
       inStock: true,
       requiresDelivery: true,
-      img: "src/assets/image8.png",
+      img: "/image8.png",
     },
     {
       id: 5,
@@ -55,7 +55,7 @@ export const navLinks = [
       price: "$10",
       inStock: true,
       requiresDelivery: true,
-      img: "src/assets/image8.png",
+      img: "/image8.png",
     },
     {
       id: 6,
@@ -63,7 +63,7 @@ export const navLinks = [
       price: "$10",
       inStock: true,
       requiresDelivery: true,
-      img: "src/assets/image8.png",
+      img: "/image8.png",
     },
     
     
@@ -76,70 +76,70 @@ export const navLinks = [
       name: "Saitama",
       msg: "Hello, this is a messaggggggggggggggggggggggggggggggggggggggggge.",
       date: "1d",
-      img:"src/assets/image9.png"
+      img:"/image9.png"
     },
     {
       id: 2,
       name: "Genos",
       msg: "hi.",
       date: "10d",
-      img:"src/assets/image10.png"
+      img:"/image10.png"
     },
     {
       id: 3,
       name: "Genos",
       msg: "I'm ready for training.",
       date: "1d",
-      img:"src/assets/image10.png"
+      img:"/image10.png"
     },
     {
       id: 4,
       name: "Genos",
       msg: "I'm ready for training.",
       date: "1d",
-      img:"src/assets/image10.png"
+      img:"/image10.png"
     },
     {
       id: 5,
       name: "Genos",
       msg: "I'm ready for training.",
       date: "1d",
-      img:"src/assets/image10.png"
+      img:"/image10.png"
     },
     {
       id: 6,
       name: "Genos",
       msg: "I'm ready for training.",
       date: "1d",
-      img:"src/assets/image10.png"
+      img:"/image10.png"
     },
     {
       id: 7,
       name: "Genos",
       msg: "I'm ready for training.",
       date: "1d",
-      img:"src/assets/image10.png"
+      img:"/image10.png"
     },
     {
       id: 8,
       name: "Genos",
       msg: "I'm ready for training.",
       date: "1d",
-      img:"src/assets/image10.png"
+      img:"/image10.png"
     },
     {
       id: 9,
       name: "Genos",
       msg: "I'm ready for training.",
       date: "1d",
-      img:"src/assets/image10.png"
+      img:"/image10.png"
     },
     {
       id: 10,
       name: "Genos",
       msg: "I'm ready for training.",
       date: "1d",
-      img:"src/assets/image10.png"
+      img:"/image10.png"
     },
 
   ];
