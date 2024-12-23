@@ -1,7 +1,8 @@
+"use client";
 import React, { useState } from "react";
-import AddProduct from "./AddProduct";
-import ProductList from "./ProductList";
-import { products as initialProducts } from "./constants";
+import AddProduct from "@/components/seller-components/MyProduct/AddProduct";
+import ProductList from "@/components/seller-components/MyProduct/ProductList";
+import { products as initialProducts } from "@/components/seller-components/constants";
 
 const MyProduct = () => {
   const [showAddProductSection, setShowAddProductSection] = useState(false);

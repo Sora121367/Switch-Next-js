@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import ProductAvailability from "./ProductAvailability";
 
@@ -80,17 +81,17 @@ const Pickup = () => {
 
         <div className="flex gap-4 mt-3 flex-wrap">
           <div className="flex items-center gap-2 border border-gray-300 rounded-lg px-4 py-2">
-            <img src="src/assets/ABA.png" alt="ABA Bank" className="w-6" />
+            <img src="/ABA.png" alt="ABA Bank" className="w-6" />
             <span>ABA Bank</span>
           </div>
 
           <div className="flex items-center gap-2 border border-gray-300 rounded-lg px-4 py-2">
-            <img src="src/assets/Acleda.png" alt="ACleda Bank" className="w-6" />
+            <img src="/Acleda.png" alt="ACleda Bank" className="w-6" />
             <span>ACleda Bank</span>
           </div>
 
           <div className="flex items-center gap-2 border border-gray-300 rounded-lg px-4 py-2">
-            <img src="src/assets/Wing.png" alt="Wing Bank" className="w-6" />
+            <img src="/Wing.png" alt="Wing Bank" className="w-6" />
             <span>Wing Bank</span>
           </div>
         </div>
