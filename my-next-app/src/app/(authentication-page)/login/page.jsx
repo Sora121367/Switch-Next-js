@@ -1,9 +1,7 @@
 import React from "react";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import Link from 'next/link'
-import { auth,signIn } from "@/auth";
-
-async function Login() {
+function Login() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50 text-black">
@@ -28,12 +26,7 @@ async function Login() {
           </button>
         </div>
 
-        <form 
-          action={async () => {
-            "use server"
-            await signIn("facebook",{redirectTo:'/role'})
-          }}
-          className="space-y-4 mb-6">
+        <div className="space-y-4 mb-6">
           <button
             className="flex items-center justify-center w-full py-2 rounded-md border border-gray-300 hover:bg-blue-100 transition"
             aria-label="Continue with Facebook"
@@ -41,22 +34,14 @@ async function Login() {
             <FaFacebook className=" mr-2" />
             Continue with Facebook
           </button>
-        </form>
-        <form 
-          action={async () => {
-            "use server"
-            await signIn("google",{redirectTo:'/role'})
-          }}
-          className="space-y-4 mb-6">
           <button
-          type="submit"
             className="flex items-center justify-center w-full py-2 rounded-md border border-gray-300 hover:bg-red-100 transition"
             aria-label="Continue with Google"
           >
             <FaGoogle className=" mr-2" />
             Continue with Google
           </button>
-        </form>
+        </div>
 
         <p className="text-gray-400 mb-4">OR</p>
 
