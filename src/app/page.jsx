@@ -3,7 +3,7 @@ import CategoryCard from "../components/Homepage/CategoryCard";
 import StoreCard from "../components/Homepage/StoreCard";
 import DiscountCard from "../components/Homepage/DiscountCard";
 import BannerCard from "../components/Homepage/BannerCard";
-
+import Link from "next/link";
 
 const HomePage = () => {
   //create link when button get start go to singup page
@@ -24,12 +24,14 @@ const HomePage = () => {
             Explore a World of Unique Shops and <br />
             Products Tailored Just for You!
           </h1>
+          <Link href="/signup">
           <button
             className="mt-3 p-3 text-white bg-[#0B5754] rounded-md text-sm sm:text-md lg:text-xl lg:mt-16 hover:bg-blue-700 transition-all duration-300"
             aria-label="Get started for free"
           >
             Get started for free
           </button>
+          </Link>
         </div>
       </div>
 
