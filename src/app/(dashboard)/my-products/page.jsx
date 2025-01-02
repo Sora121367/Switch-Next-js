@@ -1,41 +1,155 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddProduct from "@/components/seller-components/MyProduct/AddProduct";
 import ProductList from "@/components/seller-components/MyProduct/ProductList";
-import { products as initialProducts } from "@/components/seller-components/constants";
 
 const MyProduct = () => {
   const [showAddProductSection, setShowAddProductSection] = useState(false);
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState([]); // Initialize with empty array
   const [selectedProducts, setSelectedProducts] = useState([]); // State for selected product IDs
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
+  const [editingProduct, setEditingProduct] = useState(null); // State for the product being edited
+  const [updatedProduct, setUpdatedProduct] = useState({}); // State to store updated product values
 
-  // Handle selection toggling using find() to check for the product
+  useEffect(() => {
+    // Fetch products from the API
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("/api/getProduct");
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+        const data = await response.json();
+        setProducts(data.products); // Set the fetched products
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Handle selection toggling
   const toggleProductSelection = (productId) => {
-    const isSelected = selectedProducts.find((id) => id === productId);
-    if (isSelected) {
-      setSelectedProducts((prev) => prev.filter((id) => id !== productId));
-    } else {
-      setSelectedProducts((prev) => [...prev, productId]);
+    setSelectedProducts((prevSelected) =>
+      prevSelected.includes(productId)
+        ? prevSelected.filter((_id) => _id !== productId)
+        : [...prevSelected, productId]
+    );
+  };
+
+  // Bulk delete selected products
+  const handleDeleteSelected = async () => {
+    try {
+      const response = await fetch("/api/deleteProduct", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: selectedProducts }),
+      });
+
+      if (response.ok) {
+        setProducts((prev) =>
+          prev.filter((product) => !selectedProducts.includes(product._id))
+        );
+        setSelectedProducts([]);
+      } else {
+        const data = await response.json();
+        console.error(data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting products:", error);
     }
   };
 
-  // Handle deletion of selected products
-  const handleDeleteSelected = () => {
-    setProducts((prev) =>
-      prev.filter((product) => !selectedProducts.includes(product.id))
-    );
-    setSelectedProducts([]); // Clear selection
+  // Handle single product delete
+  const handleDeleteProduct = async (productId) => {
+    try {
+      const response = await fetch("/api/deleteProduct", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ids: [productId] }),
+      });
+
+      if (response.ok) {
+        setProducts((prev) =>
+          prev.filter((product) => product._id !== productId)
+        );
+      } else {
+        const data = await response.json();
+        console.error(data.message);
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
   };
+
+  const handleEditProduct = (product) => {
+    setEditingProduct(product);
+    setUpdatedProduct({ ...product });  // Ensure that _id is included in the state
+  };
+  
+  const handleUpdateProduct = async () => {
+    if (!updatedProduct._id) {
+      alert("Product ID is missing");
+      return;
+    }
+  
+    try {
+      const response = await fetch(`/api/editProduct`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: updatedProduct._id,
+          data: updatedProduct, // Send all the fields that you want to update
+        }),
+      });
+  
+      const data = await response.json();
+      if (response.ok) {
+        console.log("Product updated successfully:", data);
+  
+        // Update the product in the local state
+        setProducts((prevProducts) =>
+          prevProducts.map((product) =>
+            product._id === updatedProduct._id ? updatedProduct : product
+          )
+        );
+  
+        // Close the edit form
+        setEditingProduct(null);
+  
+        // Optional: Display a success message
+        alert("Product updated successfully!");
+      } else {
+        console.error("Error:", data.message);
+      }
+    } catch (error) {
+      console.error("Error updating product:", error);
+    }
+  };
+  
+  
 
   // Filter products based on the search query
   const filteredProducts = products.filter((product) =>
     product.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
   return (
     <div className="w-full h-screen">
-      {/* Main Section */}
       <main className="w-full p-4">
         {!showAddProductSection ? (
           <div>
@@ -43,7 +157,7 @@ const MyProduct = () => {
               <h1 className="text-xl font-semibold">Products</h1>
               <div className="flex gap-14 p-6">
                 <button
-                  onClick={() => setShowAddProductSection(true)} // Show Add Product Section
+                  onClick={() => setShowAddProductSection(true)}
                   className="w-40 h-10 bg-[#0B5754] text-white text-md rounded-lg hover:bg-[#517d7b]"
                 >
                   + Add new Product
@@ -55,10 +169,10 @@ const MyProduct = () => {
 
                 <input
                   type="text"
-                  placeholder="search your products name..."
+                  placeholder="Search your product name..."
                   className="w-[370px] border-2 rounded-full p-2 px-4 outline-none"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)} // Update search query on input change
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 />
 
                 <button
@@ -68,14 +182,13 @@ const MyProduct = () => {
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-[#656f6e]"
                   }`}
-                  disabled={selectedProducts.length === 0} // Disable if no products selected
+                  disabled={selectedProducts.length === 0}
                 >
                   Delete
                 </button>
               </div>
             </div>
 
-            {/* Conditional Rendering of Product List or "Item not found!" */}
             {filteredProducts.length === 0 ? (
               <div className="text-center text-gray-500">Item not found!</div>
             ) : (
@@ -83,12 +196,82 @@ const MyProduct = () => {
                 products={filteredProducts}
                 selectedProducts={selectedProducts}
                 onToggleSelect={toggleProductSelection}
+                onDeleteProduct={handleDeleteProduct}
+                onEditProduct={handleEditProduct} // Pass handleEditProduct to the list
               />
             )}
           </div>
         ) : (
           <AddProduct onBack={() => setShowAddProductSection(false)} />
         )}
+
+{editingProduct && (
+  <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+      <h2 className="text-xl font-semibold mb-4">Edit Product</h2>
+      
+      {/* Product Title */}
+      <input
+        type="text"
+        className="w-full p-2 border-2 rounded-lg mb-4"
+        value={updatedProduct.title || ""}
+        onChange={(e) =>
+          setUpdatedProduct((prev) => ({
+            ...prev,
+            title: e.target.value,
+          }))
+        }
+        placeholder="Product Title"
+      />
+      
+      {/* Product Price */}
+      <input
+        type="number"
+        className="w-full p-2 border-2 rounded-lg mb-4"
+        value={updatedProduct.price || ""}
+        onChange={(e) =>
+          setUpdatedProduct((prev) => ({
+            ...prev,
+            price: e.target.value,
+          }))
+        }
+        placeholder="Product Price"
+      />
+      
+      {/* Product Description */}
+      <textarea
+        className="w-full p-2 border-2 rounded-lg mb-4"
+        value={updatedProduct.description || ""}
+        onChange={(e) =>
+          setUpdatedProduct((prev) => ({
+            ...prev,
+            description: e.target.value,
+          }))
+        }
+        placeholder="Product Description"
+        rows="4"
+      />
+
+      {/* Add more fields as needed */}
+
+      <div className="flex justify-between gap-4">
+        <button
+          onClick={handleUpdateProduct}
+          className="w-1/2 bg-green-500 text-white rounded-lg py-2"
+        >
+          Save
+        </button>
+        <button
+          onClick={() => setEditingProduct(null)}
+          className="w-1/2 bg-red-500 text-white rounded-lg py-2"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
       </main>
     </div>
   );
