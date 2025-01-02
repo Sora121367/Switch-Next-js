@@ -1,12 +1,14 @@
 "use client";
 import React, { useState } from "react";
 
-const ButtonSwitch = ({ size = "md" }) => {
+const ButtonSwitch = ({ formData, setFormData, size = "md" }) => {
   const [availability, setAvailability] = useState(true);
 
-  // Toggle Availability State
-  const toggleAvailability = () => {
-    setAvailability((prev) => !prev);
+  // Handle toggle switch change
+  const handleToggle = () => {
+    const newAvailability = !availability;
+    setAvailability(newAvailability);
+    setFormData({ ...formData, instock: newAvailability });
   };
 
   // Define size-specific class names
@@ -35,7 +37,7 @@ const ButtonSwitch = ({ size = "md" }) => {
           type="checkbox"
           id="availability"
           checked={availability}
-          onChange={toggleAvailability}
+          onChange={handleToggle}
           className={`peer appearance-none ${currentClasses.switch} bg-slate-100 rounded-full checked:bg-blue-600 cursor-pointer transition-colors duration-300`}
         />
         <div

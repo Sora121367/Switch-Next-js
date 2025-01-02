@@ -4,27 +4,7 @@ import { FiEdit } from "react-icons/fi";
 
 const Home = () => {
   const [selectedDate, setSelectedDate] = useState("Today");
-  const [copied, setCopied] = useState(false);
-
-  const data = [
-    { visitors: 0, productViews: 0 },
-    { visitors: 0, productViews: 0 },
-    { visitors: 0, productViews: 0 },
-    { visitors: 0, productViews: 0 },
-  ];
-
-  const channelURL = "https://www.switch.com/@Shoes-store";
-
-  const handleDateChange = (event) => {
-    setSelectedDate(event.target.value);
-  };
-
-  const handleCopyURL = () => {
-    navigator.clipboard.writeText(channelURL).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000); // Reset "copied" state after 2 seconds
-    });
-  };
+  
 
   return (
     <div className="w-full h-full p-4 bg-[#FAFAFB]">

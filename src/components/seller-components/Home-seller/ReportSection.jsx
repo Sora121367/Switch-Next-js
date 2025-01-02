@@ -1,6 +1,12 @@
-'use client';
+"use client";
 
 import React, { useState } from "react";
+import { MdOutlineInsertChartOutlined } from "react-icons/md";
+import { IoPricetagOutline } from "react-icons/io5";
+import { MdPersonAddAlt1 } from "react-icons/md";
+import { GrDocumentTime } from "react-icons/gr";
+import { RiFilePaperLine } from "react-icons/ri";
+import CashflowOverview from "./CashflowOverview";
 
 const ReportsSection = () => {
   const [selectedDate, setSelectedDate] = useState("Today");
@@ -16,9 +22,9 @@ const ReportsSection = () => {
   };
 
   return (
-    <div className="p-3 w-1/2 shadow-md">
+    <div className="p-3 w-[70%] shadow-md">
       <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-        <h1 className="text-xl font-semibold">Reports</h1>
+        <h1 className="text-xl font-semibold">Today’s Sales</h1>
         <select
           className="text-sm text-green-600 cursor-pointer bg-transparent focus:outline-none"
           value={selectedDate}
@@ -30,22 +36,62 @@ const ReportsSection = () => {
           <option value="Last 30 Days">Last 30 Days</option>
         </select>
       </div>
-      <div className="mt-4">
-        {data.map((item, index) => (
-          <div
-            key={index}
-            className="flex justify-between items-center py-4 border-b last:border-none border-gray-200"
-          >
-            <div>
-              <p className="text-sm text-gray-500">Visitors</p>
-              <h2 className="text-lg font-semibold">{item.visitors}</h2>
+
+      <div className="h-[16rem] flex gap-3">
+        <div className="w-44 h-44 bg-[#bbcdcc] flex items-center justify-center rounded-xl">
+          <div className="flex flex-col gap-y-2">
+            <div className="w-10 h-10 bg-[#63C3BE] rounded-full flex items-center justify-center">
+              <MdOutlineInsertChartOutlined className="text-white text-3xl" />
             </div>
-            <div className="text-right">
-              <p className="text-sm text-gray-500">Product views</p>
-              <h2 className="text-lg font-semibold">{item.productViews}</h2>
-            </div>
+            <h1 className="text-2xl font-semibold">$10K</h1>
+            <p className="text-[#425166]">Total sales</p>
+            <p className="text-sm text-[#4079ED]">8% from yesterday</p>
           </div>
-        ))}
+        </div>
+        <div className="w-44 h-44 bg-[#FFF4DE] flex items-center justify-center rounded-xl">
+          <div className="flex flex-col gap-y-2">
+            <div className="w-10 h-10 bg-[#63C3BE] rounded-full flex items-center justify-center">
+              <RiFilePaperLine className="text-white text-3xl" />
+            </div>
+            <h1 className="text-2xl font-semibold">$10K</h1>
+            <p className="text-[#425166]">Total sales</p>
+            <p className="text-sm text-[#4079ED]">8% from yesterday</p>
+          </div>
+        </div>
+        <div className="w-44 h-44 bg-[#DCFCE7] flex items-center justify-center rounded-xl">
+          <div className="flex flex-col gap-y-2">
+            <div className="w-10 h-10 bg-[#3CD856] rounded-full flex items-center justify-center">
+              <IoPricetagOutline className="text-white text-3xl" />
+            </div>
+            <h1 className="text-2xl font-semibold">8</h1>
+            <p className="text-[#425166]">Total sales</p>
+            <p className="text-sm text-[#4079ED]">8% from yesterday</p>
+          </div>
+        </div>
+        <div className="w-44 h-44 bg-[#F3E8FF] flex items-center justify-center rounded-xl">
+          <div className="flex flex-col gap-y-2">
+            <div className="w-10 h-10 bg-[#63C3BE] rounded-full flex items-center justify-center">
+              <MdPersonAddAlt1 className="text-white text-3xl" />
+            </div>
+            <h1 className="text-2xl font-semibold">$10K</h1>
+            <p className="text-[#425166]">Total sales</p>
+            <p className="text-sm text-[#4079ED]">8% from yesterday</p>
+          </div>
+        </div>
+        <div className="w-44 h-44 bg-[#CFCFF5] flex items-center justify-center rounded-xl">
+          <div className="flex flex-col gap-y-2">
+            <div className="w-10 h-10 bg-[#63C3BE] rounded-full flex items-center justify-center">
+              <GrDocumentTime className="text-white text-2xl" />
+            </div>
+            <h1 className="text-2xl font-semibold">$10K</h1>
+            <p className="text-[#425166]">Total sales</p>
+            <p className="text-sm text-[#4079ED]">8% from yesterday</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex-grow bg-white rounded-xl shadow-md px-6 py-4 flex flex-col items-end">
+        <CashflowOverview/>
       </div>
     </div>
   );

@@ -8,11 +8,15 @@ const Home = () => {
   return (
     <div className="w-full h-full p-4 bg-[#FAFAFB]">
       <h1 className="text-xl font-semibold">Profile information & Report</h1>
-      <div className="flex justify-between p-5">
+     
+      
+      <div className="flex justify-center p-5">
+        <ReportsSection />
+      {/* <div className="flex flex-col  p-5">
         <ChannelSection />
         <StoreSection />
+      </div> */}
       </div>
-      <ReportsSection />
     </div>
   );
 };

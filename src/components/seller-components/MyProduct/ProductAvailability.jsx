@@ -1,13 +1,17 @@
 "use client";
-import { useState } from "react";
 import React from "react";
 import ButtonSwitch from "./ButtonSwitch";
 
-const ProductAvailability = () => {
-  const [price, setPrice] = useState("");
- 
-
- 
+const ProductAvailability = ({ formData, setFormData }) => {
+  // Handle input changes for price
+  const handlePriceChange = (e) => {
+    const value = e.target.value;
+    setFormData({ 
+      ...formData, 
+      price: value, 
+      instock: true 
+    });
+  };
 
   return (
     <div className="w-[12rem] space-y-6">
@@ -17,7 +21,7 @@ const ProductAvailability = () => {
           htmlFor="price"
           className="block text-sm font-medium text-gray-700"
         >
-          Pricing
+          Price
         </label>
         <div className="w-full flex items-center mt-2 border border-gray-300 rounded px-2 py-1">
           <span className="text-gray-500">$</span>
@@ -26,8 +30,8 @@ const ProductAvailability = () => {
             id="price"
             aria-label="Enter product price"
             placeholder="00.00"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            value={formData.price}
+            onChange={handlePriceChange}
             className="ml-2 w-full border-none focus:ring-0 text-gray-800 placeholder-gray-400"
           />
         </div>
@@ -41,7 +45,7 @@ const ProductAvailability = () => {
         >
           Product Availability
         </label>
-         <ButtonSwitch/>
+        <ButtonSwitch formData={formData} setFormData={setFormData} />
       </div>
     </div>
   );

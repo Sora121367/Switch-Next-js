@@ -97,9 +97,6 @@ const Pickup = () => {
         </div>
       </div>
 
-      <div className="absolute top-0 right-2">
-        <ProductAvailability />
-      </div>
     </div>
   );
 };
