@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import connectDB from "../../../../Utils/db";
-import Product from "../../../../models/Product";
+import connectDB from "@/Utils/db";
+import Product from "@/models/Product";
 import { writeFile } from "fs/promises";
 
 export async function POST(req) {
