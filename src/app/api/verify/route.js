@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import User from "../../../../models/User";
-import connectDB from "../../../../Utils/db";
+import User from "@/models/User";
+import connectDB from "@/Utils/db"
 
 const sendResponse = (message, status, data = {}) => {
   return new NextResponse(JSON.stringify({ message, ...data }), { status });

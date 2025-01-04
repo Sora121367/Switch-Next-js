@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 import User from "@/models/User";
 import connectDB from "@/Utils/db";
 import bcrypt from "bcrypt";
-import { generateTokenAndSetCookie } from '../../../../Utils/generateTokenAndSetCookie';
-import { sendEmail } from '../../../../Utils/nodemailer'; 
+import { generateTokenAndSetCookie } from "@/Utils/generateTokenAndSetCookie";
+import { sendEmail } from "@/Utils/nodemailer";
 
 const sendResponse = (message, status, data = {}) => {
   return new NextResponse(JSON.stringify({ message, ...data }), { status });
@@ -25,7 +25,9 @@ export async function POST(req) {
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
+    const verificationToken = Math.floor(
+      100000 + Math.random() * 900000
+    ).toString();
     const verificationTokenExpiresAt = Date.now() + 24 * 60 * 60 * 1000; // 1 day expiration
 
     const newUser = new User({
