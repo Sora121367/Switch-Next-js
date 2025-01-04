@@ -8,7 +8,7 @@ const ProductSchema = new mongoose.Schema(
     instock: { type: Boolean, required: true },
     method_payment: { type: String, required: true },
     category: { type: String, default: "Uncategorized" },
-    size: { type: String },
+    size: { type: String, required:true },
     image: { type: String, required: true },
   },
   { timestamps: true }
