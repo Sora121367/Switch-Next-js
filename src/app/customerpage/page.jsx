@@ -2,7 +2,7 @@
 import React from "react";
 import CustomerHeader from "@/components/customerpage/CustomerHeader";
 import CustomerSection from "@/components/customerpage/CustomerSection";
-import Wishlist from "@/components/customerpage/Wishlist";
+// import Wishlist from "@/components/customerpage/Wishlist";
 
 const CustomerPage = () => {
   return (

@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import { NextResponse } from "next/server";
 
 export const generateTokenAndSetCookie = (response, userId) => {
   const token = jwt.sign({ userId }, process.env.JWT_KEY, {

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import User from "../../../../models/User";
-import connectDB from "../../../../Utils/db";
+import User from "@/models/User";
+import connectDB from "@/Utils/db";
 import bcrypt from "bcrypt";
 import { generateTokenAndSetCookie } from '../../../../Utils/generateTokenAndSetCookie';
 import { sendEmail } from '../../../../Utils/nodemailer'; 
