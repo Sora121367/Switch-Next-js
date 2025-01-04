@@ -9,13 +9,16 @@ export async function POST(req) {
 
     // Extract fields from form data
     const title = formData.get("title");
-    const price = formData.get("price");
+    const price = parseFloat(formData.get("price"));
     const description = formData.get("description");
-    const instock = formData.get("instock") === "true"; // Convert to boolean
+    const instock = formData.get("instock") === "true"; 
+    const method_payment = formData.get("method_payment");
+    const category = formData.get("category") || "Uncategorized"; 
+    const size = formData.get("size");
     const image = formData.get("image");
 
     // Validate required fields
-    if (!title || !price || !description || !image == null || !instock == null) {
+    if (!title || !price || !description || !method_payment || !image) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
@@ -40,7 +43,10 @@ export async function POST(req) {
       title,
       price,
       description,
-      instock, // Ensure it's saved as a boolean
+      instock,
+      method_payment,
+      category,
+      size,
       image: imageUrl, // Include the image URL
     });
 

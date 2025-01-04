@@ -93,15 +93,15 @@ const MyProduct = () => {
 
   const handleEditProduct = (product) => {
     setEditingProduct(product);
-    setUpdatedProduct({ ...product });  // Ensure that _id is included in the state
+    setUpdatedProduct({ ...product }); // Ensure that _id is included in the state
   };
-  
+
   const handleUpdateProduct = async () => {
     if (!updatedProduct._id) {
       alert("Product ID is missing");
       return;
     }
-  
+
     try {
       const response = await fetch(`/api/editProduct`, {
         method: "PUT",
@@ -113,21 +113,21 @@ const MyProduct = () => {
           data: updatedProduct, // Send all the fields that you want to update
         }),
       });
-  
+
       const data = await response.json();
       if (response.ok) {
         console.log("Product updated successfully:", data);
-  
+
         // Update the product in the local state
         setProducts((prevProducts) =>
           prevProducts.map((product) =>
             product._id === updatedProduct._id ? updatedProduct : product
           )
         );
-  
+
         // Close the edit form
         setEditingProduct(null);
-  
+
         // Optional: Display a success message
         alert("Product updated successfully!");
       } else {
@@ -137,8 +137,6 @@ const MyProduct = () => {
       console.error("Error updating product:", error);
     }
   };
-  
-  
 
   // Filter products based on the search query
   const filteredProducts = products.filter((product) =>
@@ -205,73 +203,72 @@ const MyProduct = () => {
           <AddProduct onBack={() => setShowAddProductSection(false)} />
         )}
 
-{editingProduct && (
-  <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-      <h2 className="text-xl font-semibold mb-4">Edit Product</h2>
-      
-      {/* Product Title */}
-      <input
-        type="text"
-        className="w-full p-2 border-2 rounded-lg mb-4"
-        value={updatedProduct.title || ""}
-        onChange={(e) =>
-          setUpdatedProduct((prev) => ({
-            ...prev,
-            title: e.target.value,
-          }))
-        }
-        placeholder="Product Title"
-      />
-      
-      {/* Product Price */}
-      <input
-        type="number"
-        className="w-full p-2 border-2 rounded-lg mb-4"
-        value={updatedProduct.price || ""}
-        onChange={(e) =>
-          setUpdatedProduct((prev) => ({
-            ...prev,
-            price: e.target.value,
-          }))
-        }
-        placeholder="Product Price"
-      />
-      
-      {/* Product Description */}
-      <textarea
-        className="w-full p-2 border-2 rounded-lg mb-4"
-        value={updatedProduct.description || ""}
-        onChange={(e) =>
-          setUpdatedProduct((prev) => ({
-            ...prev,
-            description: e.target.value,
-          }))
-        }
-        placeholder="Product Description"
-        rows="4"
-      />
+        {editingProduct && (
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+              <h2 className="text-xl font-semibold mb-4">Edit Product</h2>
 
-      {/* Add more fields as needed */}
+              {/* Product Title */}
+              <input
+                type="text"
+                className="w-full p-2 border-2 rounded-lg mb-4"
+                value={updatedProduct.title || ""}
+                onChange={(e) =>
+                  setUpdatedProduct((prev) => ({
+                    ...prev,
+                    title: e.target.value,
+                  }))
+                }
+                placeholder="Product Title"
+              />
 
-      <div className="flex justify-between gap-4">
-        <button
-          onClick={handleUpdateProduct}
-          className="w-1/2 bg-green-500 text-white rounded-lg py-2"
-        >
-          Save
-        </button>
-        <button
-          onClick={() => setEditingProduct(null)}
-          className="w-1/2 bg-red-500 text-white rounded-lg py-2"
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+              {/* Product Price */}
+              <input
+                type="number"
+                className="w-full p-2 border-2 rounded-lg mb-4"
+                value={updatedProduct.price || ""}
+                onChange={(e) =>
+                  setUpdatedProduct((prev) => ({
+                    ...prev,
+                    price: e.target.value,
+                  }))
+                }
+                placeholder="Product Price"
+              />
 
+              {/* Product Description */}
+              <textarea
+                className="w-full p-2 border-2 rounded-lg mb-4"
+                value={updatedProduct.description || ""}
+                onChange={(e) =>
+                  setUpdatedProduct((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                placeholder="Product Description"
+                rows="4"
+              />
+
+              {/* Add more fields as needed */}
+
+              <div className="flex justify-between gap-4">
+                <button
+                  onClick={handleUpdateProduct}
+                  className="w-1/2 bg-green-500 text-white rounded-lg py-2"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={() => setEditingProduct(null)}
+                  className="w-1/2 bg-red-500 text-white rounded-lg py-2"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
