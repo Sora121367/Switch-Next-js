@@ -12,7 +12,7 @@ const AddProduct = ({ onBack }) => {
     price: "",
     instock: true,
     image: null,
-    method_payment: "",
+    //method_payment: "",
     size: [], // Added to track sizes selected in the Attributes tab
   });
   const [message, setMessage] = useState("");
@@ -20,10 +20,10 @@ const AddProduct = ({ onBack }) => {
   const handleSave = async (e) => {
     e.preventDefault();
 
-    const { title, price, description, instock, image, method_payment, size } = formData;
+    const { title, price, description, instock, image, size } = formData;
 
     // Validation check, ensure all fields are properly filled
-    if (!title || !price || !description || !image || !method_payment || size.length === 0) {
+    if (!title || !price || !description || !image  || size.length === 0) {
       setMessage("All fields, including size, are required.");
       return;
     }
@@ -34,7 +34,7 @@ const AddProduct = ({ onBack }) => {
     formDataToSend.append("description", description);
     formDataToSend.append("instock", instock);
     formDataToSend.append("image", image);
-    formDataToSend.append(" method_payment",  method_payment);
+   // formDataToSend.append(" method_payment",  method_payment);
     formDataToSend.append("size", size); // Send size as a comma-separated string
 
     console.log("Form Data Sent to API:", Object.fromEntries(formDataToSend));
@@ -65,7 +65,7 @@ const AddProduct = ({ onBack }) => {
       price: "",
       instock: true,
       image: null,
-      method_payment: "",
+      //method_payment: "",
       size: [], // Reset size as well
     });
   };
