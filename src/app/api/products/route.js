@@ -13,8 +13,8 @@ export async function POST(req) {
     const price = parseFloat(formData.get("price")); // Ensure it's a number
     const description = formData.get("description");
     const instock = formData.get("instock") === "true"; // Convert to boolean
-    const method_payment = formData.get("method_payment");
-    const category = formData.get("category") || "Uncategorized"; // Default value
+    //const method_payment = formData.get("method_payment");
+    //const category = formData.get("category") || "Uncategorized"; // Default value
     const size = formData.get("size"); // Split into array
     const image = formData.get("image");
 
@@ -46,8 +46,8 @@ export async function POST(req) {
       price,
       description,
       instock,
-      method_payment,
-      category,
+     // method_payment,
+      //category,
       size, // Ensure size is an array
       image: imageUrl, // Include the image URL
     });
