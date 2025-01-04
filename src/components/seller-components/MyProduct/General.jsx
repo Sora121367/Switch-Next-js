@@ -3,21 +3,11 @@ import { IoChevronBackOutline } from "react-icons/io5";
 import ProductAvailability from "./ProductAvailability"; // Assuming you have this component
 
 const General = ({ formData, setFormData }) => {
-  const [image, setImage] = useState(""); // For the image preview
-
-  useEffect(() => {
-    // Sync with parent formData to reset the local image preview
-    if (!formData.image) {
-      setImage(""); // Clear image preview when formData.image is reset
-    }
-  }, [formData.image]);
-
-  // Handle file input
+  // Removed local image state
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file)); // Preview image
-      setFormData({ ...formData, image: file }); // Update the formData state with the file
+      setFormData({ ...formData, image: file }); // Update formData state with the file
     }
   };
 
@@ -29,8 +19,7 @@ const General = ({ formData, setFormData }) => {
 
   // Handle cancel image upload
   const handleCancelImage = () => {
-    setImage(null); // Reset the preview
-    setFormData({ ...formData, image: null }); // Remove image from parent state
+    setFormData({ ...formData, image: null }); // Remove image from formData
   };
 
   return (
@@ -49,15 +38,15 @@ const General = ({ formData, setFormData }) => {
             accept="image/*"
           />
           <span className="text-lg font-medium">
-            {image ? "Replace Image" : "+ Upload Image"}
+            {formData.image ? "Replace Image" : "+ Upload Image"}
           </span>
         </div>
 
-        {image && (
+        {formData.image && (
           <>
             <div className="absolute mt-9">
               <img
-                src={image}
+                src={URL.createObjectURL(formData.image)} // Using formData.image directly
                 alt="Product Preview"
                 className="h-60 object-contain rounded-lg"
               />

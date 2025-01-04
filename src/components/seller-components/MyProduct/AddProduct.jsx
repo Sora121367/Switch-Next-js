@@ -12,40 +12,43 @@ const AddProduct = ({ onBack }) => {
     price: "",
     instock: true,
     image: null,
+    method_payment: "",
+    size: [], // Added to track sizes selected in the Attributes tab
   });
   const [message, setMessage] = useState("");
 
   const handleSave = async (e) => {
     e.preventDefault();
-  
-    console.log("Form Data Before Sending:", formData);
-  
-    const { title, price, description,instock, image } = formData;
-  
-    if (!title || !price || !description || !image) {
-      setMessage("All fields, including , are required.");
+
+    const { title, price, description, instock, image, method_payment, size } = formData;
+
+    // Validation check, ensure all fields are properly filled
+    if (!title || !price || !description || !image || !method_payment || size.length === 0) {
+      setMessage("All fields, including size, are required.");
       return;
     }
-  
+
     const formDataToSend = new FormData();
     formDataToSend.append("title", title);
     formDataToSend.append("price", price);
     formDataToSend.append("description", description);
-    formDataToSend.append("instock" ,instock);
+    formDataToSend.append("instock", instock);
     formDataToSend.append("image", image);
-  
+    formDataToSend.append(" method_payment",  method_payment);
+    formDataToSend.append("size", size); // Send size as a comma-separated string
+
     console.log("Form Data Sent to API:", Object.fromEntries(formDataToSend));
-  
+
     try {
       const response = await fetch("/api/products", {
         method: "POST",
         body: formDataToSend,
       });
       const data = await response.json();
-  
+
       if (response.ok) {
         setMessage("Product created successfully!");
-        resetForm(); // Reset the form and image after saving
+        resetForm(); // Reset the form after saving
       } else {
         setMessage(data.message || "Failed to create the product.");
       }
@@ -54,18 +57,18 @@ const AddProduct = ({ onBack }) => {
       setMessage("An error occurred. Please try again later.");
     }
   };
-  
-  // Reset the form and image preview
+
   const resetForm = () => {
     setFormData({
       title: "",
       description: "",
       price: "",
       instock: true,
-      image: null, // Reset image in formData
+      image: null,
+      method_payment: "",
+      size: [], // Reset size as well
     });
   };
-  
 
   const tabs = [
     { name: "general", label: "General" },
@@ -100,7 +103,7 @@ const AddProduct = ({ onBack }) => {
               Back
             </button>
           </div>
-          <h2 className="text-xl font-semibold">Add New Products</h2>
+          <h2 className="text-xl font-semibold">Add New Product</h2>
         </div>
 
         {/* Action Buttons */}
