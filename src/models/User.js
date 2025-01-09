@@ -20,8 +20,8 @@ const UserSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['customer', 'seller'],
-      default: 'customer',// Default to customer
+      enum: ['seller','customer'],
+      default: 'seller',// Default to customer
       required: false, 
     },
     verificationToken: {
