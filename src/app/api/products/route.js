@@ -1,11 +1,36 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/Utils/db";
 import Product from "@/models/Product";
+import User from "@/models/User"; // Import your User model
 import { writeFile } from "fs/promises";
-
+import jwt from "jsonwebtoken"; // Import jsonwebtoken
 
 export async function POST(req) {
   try {
+    // Extract token from the Authorization header
+    const token = req.headers.get("Authorization")?.split(" ")[1];
+
+
+    if (!token) {
+      return NextResponse.json(
+        { message: "Authorization token is required" },
+        { status: 401 }  // Unauthorized
+      );
+    }
+
+    // Verify and decode the token to extract user_Id
+    let user_Id;
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_KEY); // Use the same secret key you used for signing the token
+      user_Id = decoded.id; // Get user_Id from the decoded token
+    } catch (err) {
+      console.error("Token Verification Error:", err);
+      return NextResponse.json(
+        { message: "Invalid token", error: err.message },
+        { status: 403 }  // Forbidden
+      );
+    }
+
     const formData = await req.formData();
 
     // Extract fields from form data
@@ -13,9 +38,7 @@ export async function POST(req) {
     const price = parseFloat(formData.get("price")); // Ensure it's a number
     const description = formData.get("description");
     const instock = formData.get("instock") === "true"; // Convert to boolean
-    //const method_payment = formData.get("method_payment");
-    //const category = formData.get("category") || "Uncategorized"; // Default value
-    const size = formData.get("size"); // Split into array
+    const size = formData.get("size");
     const image = formData.get("image");
 
     // Validate required fields
@@ -23,6 +46,18 @@ export async function POST(req) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
+      );
+    }
+
+    // Connect to the database
+    await connectDB();
+
+    // Verify user exists
+    const user = await User.findById(user_Id);
+    if (!user) {
+      return NextResponse.json(
+        { message: "Invalid user ID. User does not exist." },
+        { status: 403 } // Forbidden
       );
     }
 
@@ -36,19 +71,14 @@ export async function POST(req) {
     // Save image to the server
     await writeFile(imagePath, buffer);
 
-    // Connect to the database
-    await connectDB();
-
-  
     // Create a new product
     const newProduct = new Product({
+      user_Id,
       title,
       price,
       description,
       instock,
-     // method_payment,
-      //category,
-      size, // Ensure size is an array
+      size,
       image: imageUrl, // Include the image URL
     });
 
@@ -73,4 +103,3 @@ export async function POST(req) {
     );
   }
 }
-

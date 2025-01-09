@@ -69,3 +69,5 @@ export async function POST(req) {
     return sendResponse("Server error", 500);
   }
 }
+
+// register

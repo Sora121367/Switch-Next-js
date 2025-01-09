@@ -5,24 +5,39 @@ import ProductList from "@/components/seller-components/MyProduct/ProductList";
 
 const MyProduct = () => {
   const [showAddProductSection, setShowAddProductSection] = useState(false);
-  const [products, setProducts] = useState([]); // Initialize with empty array
-  const [selectedProducts, setSelectedProducts] = useState([]); // State for selected product IDs
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
-  const [loading, setLoading] = useState(true); // Loading state
-  const [error, setError] = useState(null); // Error state
-  const [editingProduct, setEditingProduct] = useState(null); // State for the product being edited
-  const [updatedProduct, setUpdatedProduct] = useState({}); // State to store updated product values
+  const [products, setProducts] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [updatedProduct, setUpdatedProduct] = useState({});
 
   useEffect(() => {
-    // Fetch products from the API
-    const fetchProducts = async () => {
+    const getProducts = async () => {
       try {
-        const response = await fetch("/api/getProduct");
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+          throw new Error("User is not authenticated.");
         }
+
+        // Fetch products using the token in the Authorization header
+        const response = await fetch("/api/getProduct", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, 
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || "Failed to fetch products.");
+        }
+
         const data = await response.json();
-        setProducts(data.products); // Set the fetched products
+        setProducts(data.products);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -30,10 +45,9 @@ const MyProduct = () => {
       }
     };
 
-    fetchProducts();
+    getProducts();
   }, []);
 
-  // Handle selection toggling
   const toggleProductSelection = (productId) => {
     setSelectedProducts((prevSelected) =>
       prevSelected.includes(productId)
@@ -42,7 +56,6 @@ const MyProduct = () => {
     );
   };
 
-  // Bulk delete selected products
   const handleDeleteSelected = async () => {
     try {
       const response = await fetch("/api/deleteProduct", {
@@ -67,7 +80,6 @@ const MyProduct = () => {
     }
   };
 
-  // Handle single product delete
   const handleDeleteProduct = async (productId) => {
     try {
       const response = await fetch("/api/deleteProduct", {
@@ -93,7 +105,7 @@ const MyProduct = () => {
 
   const handleEditProduct = (product) => {
     setEditingProduct(product);
-    setUpdatedProduct({ ...product }); // Ensure that _id is included in the state
+    setUpdatedProduct({ ...product });
   };
 
   const handleUpdateProduct = async () => {
@@ -110,25 +122,18 @@ const MyProduct = () => {
         },
         body: JSON.stringify({
           id: updatedProduct._id,
-          data: updatedProduct, // Send all the fields that you want to update
+          data: updatedProduct,
         }),
       });
 
       const data = await response.json();
       if (response.ok) {
-        console.log("Product updated successfully:", data);
-
-        // Update the product in the local state
         setProducts((prevProducts) =>
           prevProducts.map((product) =>
             product._id === updatedProduct._id ? updatedProduct : product
           )
         );
-
-        // Close the edit form
         setEditingProduct(null);
-
-        // Optional: Display a success message
         alert("Product updated successfully!");
       } else {
         console.error("Error:", data.message);
@@ -138,7 +143,6 @@ const MyProduct = () => {
     }
   };
 
-  // Filter products based on the search query
   const filteredProducts = products.filter((product) =>
     product.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -195,7 +199,7 @@ const MyProduct = () => {
                 selectedProducts={selectedProducts}
                 onToggleSelect={toggleProductSelection}
                 onDeleteProduct={handleDeleteProduct}
-                onEditProduct={handleEditProduct} // Pass handleEditProduct to the list
+                onEditProduct={handleEditProduct}
               />
             )}
           </div>
@@ -207,8 +211,6 @@ const MyProduct = () => {
           <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-96">
               <h2 className="text-xl font-semibold mb-4">Edit Product</h2>
-
-              {/* Product Title */}
               <input
                 type="text"
                 className="w-full p-2 border-2 rounded-lg mb-4"
@@ -221,8 +223,6 @@ const MyProduct = () => {
                 }
                 placeholder="Product Title"
               />
-
-              {/* Product Price */}
               <input
                 type="number"
                 className="w-full p-2 border-2 rounded-lg mb-4"
@@ -235,8 +235,6 @@ const MyProduct = () => {
                 }
                 placeholder="Product Price"
               />
-
-              {/* Product Description */}
               <textarea
                 className="w-full p-2 border-2 rounded-lg mb-4"
                 value={updatedProduct.description || ""}
@@ -249,19 +247,16 @@ const MyProduct = () => {
                 placeholder="Product Description"
                 rows="4"
               />
-
-              {/* Add more fields as needed */}
-
               <div className="flex justify-between gap-4">
                 <button
                   onClick={handleUpdateProduct}
-                  className="w-1/2 bg-green-500 text-white rounded-lg py-2"
+                  className="bg-[#0B5754] text-white px-4 py-2 rounded-lg hover:bg-[#517d7b]"
                 >
                   Save
                 </button>
                 <button
                   onClick={() => setEditingProduct(null)}
-                  className="w-1/2 bg-red-500 text-white rounded-lg py-2"
+                  className="bg-gray-300 text-black px-4 py-2 rounded-lg"
                 >
                   Cancel
                 </button>

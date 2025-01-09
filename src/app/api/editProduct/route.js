@@ -5,9 +5,9 @@ import mongoose from "mongoose";
 
 export async function PUT(req) {
   try {
-    const { id, data } = await req.json();
+    const { id, user_Id, data } = await req.json();
 
-    // Validate if the ID is a valid ObjectId
+    // Validate if the ID and user_Id are valid
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return NextResponse.json(
         { message: `Invalid ObjectId: ${id}` },
@@ -15,19 +15,30 @@ export async function PUT(req) {
       );
     }
 
+    if (!mongoose.Types.ObjectId.isValid(user_Id)) {
+      return NextResponse.json(
+        { message: `Invalid user_Id: ${user_Id}` },
+        { status: 400 }
+      );
+    }
+
     // Connect to the database
     await connectDB();
 
-    // Find and update the product
-    const updatedProduct = await Product.findByIdAndUpdate(id, data, {
-      new: true, // Return the updated document
-      runValidators: true, // Ensure validations are applied
-    });
+    // Find the product by ID and user_Id and update it
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: id, user_Id }, // Match both product ID and user ID
+      data, // Update data
+      {
+        new: true, // Return the updated document
+        runValidators: true, // Ensure validations are applied
+      }
+    );
 
     // Check if product was found and updated
     if (!updatedProduct) {
       return NextResponse.json(
-        { message: "Product not found" },
+        { message: "Product not found or you do not have permission to update this product" },
         { status: 404 }
       );
     }

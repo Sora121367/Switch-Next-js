@@ -4,12 +4,14 @@ const CustomerProduct = ({ title, description, price, image }) => {
   return (
     <div className="w-[20rem] bg-teal-100 rounded-lg shadow-md">
       <div className="flex flex-col">
-        {/* Product Image */}
+        <div className="w-[20rem] h-[22rem]">
+           {/* Product Image */}
         <img
           src={image}
           alt={title}
-          className="w-full h-48 object-cover rounded-t-md"
+          className="w-full object-cover rounded-t-md"
         />
+        </div>
         {/* Product Info */}
         <div className="p-4">
           <p className="text-gray-500 mb-1">{description}</p>

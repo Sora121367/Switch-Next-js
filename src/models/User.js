@@ -18,6 +18,12 @@ const UserSchema = new mongoose.Schema(
       maxLength: [20],
       trim: true, // Removes extra spaces
     },
+    role: {
+      type: String,
+      enum: ['customer', 'seller'],
+      default: 'customer',// Default to customer
+      required: false, 
+    },
     verificationToken: {
       type: String,
       required: true, // Token to verify email

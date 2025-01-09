@@ -19,21 +19,19 @@ function Login() {
     setError(""); // Clear previous errors
 
     // Send login credentials to the API
-    const res = await fetch('/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }), // Use the state values
     });
 
     const data = await res.json();
 
     if (res.ok) {
-      // Assuming the token is returned in `data.token` from the API
-      localStorage.setItem('token', data.token);
-      console.log('Token saved to localStorage:', data.token);
-      router.push('/my-products'); // Navigate to the dashboard or home page after login
+      localStorage.setItem("token", data.token); // Store token in localStorage
+      router.push("/role");
     } else {
-      setError(data.message || "Invalid email or password"); // Set error message
+      setError(data.message || "Invalid email or password");
       console.error(data.message); // Invalid email or password
     }
 
@@ -43,7 +41,9 @@ function Login() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50 text-black">
       <div className="bg-white rounded-lg p-8 w-full max-w-md text-center shadow-lg">
-        <h1 className="text-2xl font-semibold mb-2">Sign in with Switch account</h1>
+        <h1 className="text-2xl font-semibold mb-2">
+          Sign in with Switch account
+        </h1>
         <p className="text-gray-500 text-sm mb-6">
           or create a{" "}
           <Link href="/signup" className="text-blue-400 underline">
