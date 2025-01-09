@@ -13,51 +13,59 @@ const AddProduct = ({ onBack }) => {
     instock: true,
     image: null,
     //method_payment: "",
-    size: [], // Added to track sizes selected in the Attributes tab
+    size: "", // Added to track sizes selected in the Attributes tab
   });
   const [message, setMessage] = useState("");
 
   const handleSave = async (e) => {
     e.preventDefault();
-
+  
     const { title, price, description, instock, image, size } = formData;
-
+  
     // Validation check, ensure all fields are properly filled
-    if (!title || !price || !description || !image  || size.length === 0) {
-      setMessage("All fields, including size, are required.");
+    if (!title || !price || !description || !image || size.length === 0) {
+      setMessage("All fields, including size, are required. Please fill in all the details.");
       return;
     }
-
+  
     const formDataToSend = new FormData();
     formDataToSend.append("title", title);
     formDataToSend.append("price", price);
     formDataToSend.append("description", description);
     formDataToSend.append("instock", instock);
     formDataToSend.append("image", image);
-   // formDataToSend.append(" method_payment",  method_payment);
-    formDataToSend.append("size", size); // Send size as a comma-separated string
-
-    console.log("Form Data Sent to API:", Object.fromEntries(formDataToSend));
-
+    formDataToSend.append("size",size)
+    
+    // Retrieve the token from local storage or wherever it is stored
+    const token = localStorage.getItem("token");  // Or wherever you store the token
+  
+    if (!token) {
+      setMessage("Authorization token is required. Please log in and try again.");
+      return;
+    }
+  
     try {
       const response = await fetch("/api/products", {
         method: "POST",
         body: formDataToSend,
+        headers: {
+          "Authorization": `Bearer ${token}`, // Add the Authorization header
+        },
       });
       const data = await response.json();
-
+  
       if (response.ok) {
         setMessage("Product created successfully!");
         resetForm(); // Reset the form after saving
       } else {
-        setMessage(data.message || "Failed to create the product.");
+        setMessage(data.message || "Failed to create the product. Please check the details.");
       }
     } catch (error) {
       console.error("Error creating product:", error);
-      setMessage("An error occurred. Please try again later.");
+      setMessage("An error occurred while creating the product. Please try again later.");
     }
   };
-
+  
   const resetForm = () => {
     setFormData({
       title: "",
@@ -66,7 +74,7 @@ const AddProduct = ({ onBack }) => {
       instock: true,
       image: null,
       //method_payment: "",
-      size: [], // Reset size as well
+      size: "" // Reset size as well
     });
   };
 

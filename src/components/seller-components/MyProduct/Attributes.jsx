@@ -7,7 +7,7 @@ const Attributes = ({ formData, setFormData }) => {
     if (!formData.size) {
       setFormData((prevFormData) => ({
         ...prevFormData,
-        size: [],
+        size: "",
       }));
     }
   }, [formData.size, setFormData]);

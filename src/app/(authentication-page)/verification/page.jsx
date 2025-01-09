@@ -45,8 +45,7 @@ function Login() {
 
       const data = await res.json();
       if (res.status === 200) {
-        router.push("/my-products"); // Redirect after successful verification
-      } else {
+        router.push("/login"); 
         setError(data.message || "Error verifying code, please try again.");
       }
     } catch (err) {

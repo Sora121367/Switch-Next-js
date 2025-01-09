@@ -1,33 +1,50 @@
-// import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
+import { NextResponse } from 'next/server';
+import User from '@/models/User'; // Import your User model
 
-// export const verifyToken = (req) => {
-//   const authHeader = req.headers["authorization"];
-//   const token = authHeader && authHeader.split(" ")[1];
+// Middleware to verify JWT token and fetch all user data
+export async function verifyToken(req) {
+  const authHeader = req.headers.get('authorization');
+  const token = authHeader && authHeader.split(' ')[1];
 
-//   if (!token) {
-//     return { error: "Unauthenticated", status: 401 };
-//   }
+  console.log("Authorization Header:", authHeader);  // Log incoming headers
+  console.log("Token:", token);  // Log the extracted token
 
-//   try {
-//     // Verify the token
-//     const user = jwt.verify(token, process.env.JWT_KEY);
+  if (!token) {
+    return new NextResponse(
+      JSON.stringify({ message: "Unauthenticated" }),
+      { status: 401 }
+    );
+  }
 
-//     return { user }; // Return the verified user
-//   } catch (err) {
-//     console.error("JWT Verification Error:", process.env.NODE_ENV === 'development' ? err : 'An error occurred during token verification');
-    
-//     // Handle specific errors more granularly
-//     if (err.name === "TokenExpiredError") {
-//       return { error: "Token expired", status: 403 };
-//     }
-    
-//     return { error: "Invalid or expired token", status: 403 };
-//   }
-// }
- 
-//  export const generateToken = (res,useId) => {
-// d
-// }
+  try {
+    // Verify token
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+    req.user = decoded; // Attach user info to request object
 
+    // Fetch the complete user data from the database
+    const user = await User.findById(decoded.id); // Assuming the token contains user.id
 
+    if (!user) {
+      return new NextResponse(
+        JSON.stringify({ message: "User not found" }),
+        { status: 404 }
+      );
+    }
 
+    // Log the complete user data
+    console.log("Complete User Data:", user); // Log the full user data
+
+    // Return user data in the response
+    return new NextResponse(
+      JSON.stringify({ message: "Token verified", user }),
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Token verification error:", error);
+    return new NextResponse(
+      JSON.stringify({ message: "Invalid or expired token" }),
+      { status: 403 }
+    );
+  }
+}
