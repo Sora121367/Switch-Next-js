@@ -1,17 +1,7 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 
 const Attributes = ({ formData, setFormData }) => {
-  useEffect(() => {
-    // Ensure the formData includes the selected sizes on load
-    if (!formData.size) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        size: "",
-      }));
-    }
-  }, [formData.size, setFormData]);
-
   const toggleSize = (size) => {
     const updatedSizes = [...formData.size];
     if (updatedSizes.includes(size)) {
@@ -28,13 +18,6 @@ const Attributes = ({ formData, setFormData }) => {
         size: updatedSizes,
       }));
     }
-
-    // Notify the user when size is added or removed
-    alert(
-      updatedSizes.includes(size)
-        ? `Size "${size}" has been added.`
-        : `Size "${size}" has been removed.`
-    );
   };
 
   return (
