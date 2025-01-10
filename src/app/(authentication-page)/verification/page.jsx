@@ -45,7 +45,7 @@ function Login() {
 
       const data = await res.json();
       if (res.status === 200) {
-        router.push("/login"); 
+        router.push("/role"); 
         setError(data.message || "Error verifying code, please try again.");
       }
     } catch (err) {

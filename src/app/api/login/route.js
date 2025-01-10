@@ -3,6 +3,7 @@ import connectDB from '@/Utils/db';
 import User from '@/models/User';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'; 
+import { getToken } from '@/Utils/verifyToken';
 
 // Helper to send responses
 const sendResponse = (message, status, data = {}) => {
@@ -48,26 +49,7 @@ export async function POST(req) {
   }
 }
 
-// Function to generate JWT token
-function getToken(user) {
-  try {
-    // Generate JWT with minimal user data
-    return jwt.sign(
-      {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        role: user.role, // Add role to the token
-      },
-      process.env.JWT_KEY,
-      { expiresIn: '5h' }
-    );
-    
-  } catch (error) {
-    console.error('JWT Error:', error);
-    throw new Error('Failed to generate token');
-  }
-}
+
 
 
 //login

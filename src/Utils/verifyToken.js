@@ -48,3 +48,26 @@ export async function verifyToken(req) {
     );
   }
 }
+
+
+
+// Function to generate JWT token
+export function getToken(user) {
+  try {
+    // Generate JWT with minimal user data
+    return jwt.sign(
+      {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      },
+      process.env.JWT_KEY,
+      { expiresIn: '5h' }
+    );
+    
+  } catch (error) {
+    console.error('JWT Error:', error);
+    throw new Error('Failed to generate token');
+  }
+}
