@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import useAuth from "@/useAuth";
 import { IoHeartOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
@@ -7,6 +8,7 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 
 const CustomerHeader = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const {user,loading} = useAuth();
 
   return (
     <header className="top-0 left-0 right-0 z-50 py-5 text-white  shadow-md">
@@ -65,7 +67,11 @@ const CustomerHeader = () => {
           {/* User Profile */}
           <div className="flex items-center gap-3">
             <FaUser className="hover:text-gray-400 cursor-pointer text-2xl" />
-            <p className="text-base">Ung Mengly</p>
+            {loading ? (
+            <p className="text-base">Loading...</p>
+          ) : (
+            <p className="text-base">{user?.username || "Guest"}</p>
+          )}
           </div>
         </div>
       </nav>

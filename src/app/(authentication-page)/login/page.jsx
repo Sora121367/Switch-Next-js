@@ -18,24 +18,37 @@ function Login() {
     setLoading(true);
     setError(""); // Clear previous errors
 
-    // Send login credentials to the API
-    const res = await fetch("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }), // Use the state values
-    });
+    try {
+      // Send login credentials to the API
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      localStorage.setItem("token", data.token); // Store token in localStorage
-      router.push("/role");
-    } else {
-      setError(data.message || "Invalid email or password");
-      console.error(data.message); // Invalid email or password
+      if (res.ok) {
+        localStorage.setItem("token", data.token); // Store token in localStorage
+        setLoading(false);
+        router.push("/role"); // Navigate to the role page
+      } else {
+        setError(data.message || "Invalid email or password");
+      }
+    } catch (err) {
+      setError("Something went wrong. Please try again later.");
+      console.error(err);
+    } finally {
+      setLoading(false); // End the loading state
     }
+  }
 
-    setLoading(false); // End the loading state
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-50 text-black">
+        <p className="text-xl font-semibold">Logging in...</p>
+      </div>
+    );
   }
 
   return (
@@ -112,7 +125,7 @@ function Login() {
             }`}
             disabled={loading}
           >
-            {loading ? "Logging in..." : "Log In"}
+            Log In
           </button>
         </form>
 

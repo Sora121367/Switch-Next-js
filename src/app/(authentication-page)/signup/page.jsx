@@ -31,17 +31,17 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { username, email, password } = formData;
-
+  
     if (!isValidEmail(email)) {
       setError("Please enter a valid email address.");
       return;
     }
-
+  
     if (!password || password.length < 5) {
       setError("Password must be at least 5 characters long.");
       return;
     }
-
+  
     try {
       const res = await fetch("/api/register", {
         method: "POST",
@@ -50,27 +50,35 @@ function SignUp() {
         },
         body: JSON.stringify({ username, email, password }),
       });
-
+  
       const data = await res.json();
-
+  
       if (res.status === 204) {
         console.log("No content returned from server.");
         return;
       }
-
+  
       if (res.status === 400) {
         setError(data.message || "This email is already registered");
       }
-
+  
       if (res.status === 201) {
+        // Assuming the token is returned in the response data
+        const { token } = data;
+  
+        // Store the token in localStorage
+        localStorage.setItem("token", token);
+  
         setFormData({ username: "", email: "", password: "" });
+        setError(""); // Clear error on successful signup
         router.push("/verification"); // Redirect to verification page
       }
     } catch (error) {
-      setError("Error, try again");
+      setError("Error, please try again.");
       console.log(error);
     }
   };
+  
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-50 text-black">
