@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ['seller','customer'],
-      default: 'seller',// Default to customer
+      default: null,
       required: false, 
     },
     verificationToken: {
