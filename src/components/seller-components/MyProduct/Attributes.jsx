@@ -1,17 +1,28 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const Attributes = ({ formData, setFormData }) => {
+
+  useEffect(() => {
+    // Ensure the formData includes the selected sizes on load
+    if (!formData.size) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        size: [],
+      }));
+    }
+  }, [formData.size, setFormData]);
+
   const toggleSize = (size) => {
     const updatedSizes = [...formData.size];
     if (updatedSizes.includes(size)) {
-      // Remove size from the selected sizes
+      // Remove size from selected sizes
       setFormData((prevFormData) => ({
         ...prevFormData,
         size: updatedSizes.filter((item) => item !== size),
       }));
     } else {
-      // Add size to the selected sizes
+      // Add size to selected sizes
       updatedSizes.push(size);
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -20,9 +31,30 @@ const Attributes = ({ formData, setFormData }) => {
     }
   };
 
+
   return (
     <div className="flex flex-col gap-y-4 p-4">
-      <h1 className="text-xl mt-2">Local</h1>
+      <h1 className="text-xl mt-2">Attributes</h1>
+
+      {/* UPC Input */}
+      <div>
+        <label htmlFor="upc" className="block text-sm font-bold text-gray-700">
+          UPC
+        </label>
+        <input
+          id="upc"
+          placeholder="Enter the UPC"
+          value={formData.upc || ""}
+          onChange={(e) =>
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              upc: e.target.value,
+            }))
+          }
+          className="mt-1 p-2 w-1/2 border border-black rounded"
+        />
+      </div>
+
 
       {/* Size Selection */}
       <div className="w-[25rem] bg-gray-100 p-4 rounded-lg">
@@ -36,19 +68,10 @@ const Attributes = ({ formData, setFormData }) => {
                 formData.size.includes(size)
                   ? "border-green-400 bg-green-100"
                   : "border-gray-400 bg-white"
-              } relative`}
+              }`}
               onClick={() => toggleSize(size)}
             >
               <span className="text-sm">{size}</span>
-              <button
-                className={`absolute -top-2 -right-1 text-xs w-5 h-5 flex items-center justify-center rounded-full ${
-                  formData.size.includes(size)
-                    ? "bg-red-500 text-white"
-                    : "bg-green-500 text-white"
-                }`}
-              >
-                {formData.size.includes(size) ? "−" : "+"}
-              </button>
             </li>
           ))}
         </ul>
