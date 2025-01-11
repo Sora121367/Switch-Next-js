@@ -49,24 +49,24 @@ const AddProductDiscount = ({ onBack }) => {
       </div>
 
       {/* Buttons Section */}
-      <div className="p-3 flex justify-between items-center">
-        <div className="flex gap-6">
+      <div className="p-3 flex flex-col sm:flex-row justify-between items-center gap-y-4 sm:gap-y-0">
+        <div className="flex gap-6 w-full sm:w-auto">
           <button
             onClick={handleSave}
-            className="bg-[#0B5754] w-[8rem] h-[2.4rem] text-white rounded hover:bg-[#084d4b]"
+            className="bg-[#0B5754] w-full sm:w-[8rem] h-[2.4rem] text-white rounded hover:bg-[#084d4b] mb-4 sm:mb-0"
           >
             Save Product
           </button>
           <button
-            className="w-[9rem] h-[2.4rem] rounded border border-black hover:bg-slate-500"
+            className="w-full sm:w-[9rem] h-[2.4rem] rounded border border-black hover:bg-slate-500 mb-4 sm:mb-0"
             onClick={() => console.log("Duplicate Product clicked")}
           >
             Duplicate Product
           </button>
         </div>
-        <div>
+        <div className="w-full sm:w-auto">
           <button
-            className="w-[9rem] h-[2.4rem] rounded-lg bg-black text-white hover:bg-slate-500"
+            className="w-full sm:w-[9rem] h-[2.4rem] rounded-lg bg-black text-white hover:bg-slate-500"
             onClick={() => console.log("Remove clicked")}
           >
             Remove
@@ -76,6 +76,7 @@ const AddProductDiscount = ({ onBack }) => {
 
       {/* Validation Error */}
       {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+
       {/* Discount Value */}
       <div className="mb-4">
         <label className="block font-medium mb-1">Discount Value</label>
@@ -111,8 +112,8 @@ const AddProductDiscount = ({ onBack }) => {
       <div className="border rounded p-4">
         <h3 className="font-semibold mb-4">Active Dates</h3>
         {/* Start Date/Time */}
-        <div className="flex gap-4 mb-4">
-          <div>
+        <div className="flex flex-col sm:flex-row gap-4 mb-4">
+          <div className="w-full sm:w-auto">
             <label className="block text-sm mb-1">Start Date</label>
             <input
               type="date"
@@ -122,7 +123,7 @@ const AddProductDiscount = ({ onBack }) => {
               className="border rounded p-2 w-full"
             />
           </div>
-          <div>
+          <div className="w-full sm:w-auto">
             <label className="block text-sm mb-1">Start Time</label>
             <input
               type="time"
@@ -145,8 +146,8 @@ const AddProductDiscount = ({ onBack }) => {
             Set End Date
           </label>
           {hasEndDate && (
-            <div className="flex gap-4">
-              <div>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="w-full sm:w-auto">
                 <label className="block text-sm mb-1">End Date</label>
                 <input
                   type="date"
@@ -156,7 +157,7 @@ const AddProductDiscount = ({ onBack }) => {
                   className="border rounded p-2 w-full"
                 />
               </div>
-              <div>
+              <div className="w-full sm:w-auto">
                 <label className="block text-sm mb-1">End Time</label>
                 <input
                   type="time"

@@ -2,18 +2,18 @@
 import React from "react";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { IoMdEye } from "react-icons/io";
-
 import { FiCreditCard } from "react-icons/fi";
+
 const Orderdetails = ({ onBack }) => {
   const products = [
     {
       src: "/image8.png",
-      name: "Vintage T-Shirts: A Timeless Retro Look",
+      name: "Vintage T-Shirts: A Timeless Look",
       size: "M",
       price: "$10.00",
       quantity: 1,
     },
-    {
+    { 
       src: "/image8.png",
       name: "Flowers T-shirt: The Real Man",
       size: "L",
@@ -28,10 +28,10 @@ const Orderdetails = ({ onBack }) => {
       quantity: 1,
     },
   ];
+
   return (
     <div className="">
       {/* Order products details */}
-
       <section className="p-6 flex justify-between gap-2 items-center">
         {/* Back Button */}
         <div className="flex items-center gap-4">
@@ -39,7 +39,7 @@ const Orderdetails = ({ onBack }) => {
             <IoChevronBackOutline className="text-lg" />
             <button
               className="text-lg font-medium text-[#0B5754]"
-              onClick={onBack} // Uncommented the onClick handler
+              onClick={onBack}
             >
               Back
             </button>
@@ -48,15 +48,15 @@ const Orderdetails = ({ onBack }) => {
         </div>
       </section>
 
-      <div className="flex p-6 space-x-8">
+      <div className="flex flex-wrap p-6 space-x-0 lg:space-x-8">
         {/* Left Section */}
         <div className="flex-1 space-y-4">
-          <div className="flex justify-between text-gray-700">
+          <div className="flex justify-between text-gray-700 flex-wrap gap-4">
             <p className="font-semibold text-xl">$46.24</p>
             <p className="text-sm">31 October 2024 19:25</p>
           </div>
 
-          <div className="flex justify-between mt-2">
+          <div className="flex flex-col md:flex-row justify-between mt-2 gap-4">
             <div className="space-y-2">
               <p className="font-semibold text-gray-700">Payment Status</p>
               <p className="text-sm text-yellow-600">Awaiting Payment</p>
@@ -85,7 +85,7 @@ const Orderdetails = ({ onBack }) => {
               {products.map((product, index) => (
                 <div
                   key={index}
-                  className="flex justify-between items-center text-sm"
+                  className="flex justify-between items-center text-sm flex-wrap gap-4"
                 >
                   <div className="flex items-center space-x-4">
                     <img
@@ -107,7 +107,7 @@ const Orderdetails = ({ onBack }) => {
         </div>
 
         {/* Right Section */}
-        <div className="w-72 h-[22rem] bg-gray-50 p-4 rounded-md shadow-lg">
+        <div className="w-full lg:w-72 h-auto lg:h-[22rem] bg-gray-50 p-4 rounded-md shadow-lg">
           {/* Customer Details */}
           <div className="flex gap-2 items-center">
             <img
@@ -131,9 +131,8 @@ const Orderdetails = ({ onBack }) => {
               <p>View customer information</p>
             </div>
           </div>
-       
 
-         <hr className="  mt-16 border-1 border-black" />
+          <hr className="mt-16 border-1 border-black" />
           {/* Payment Details */}
           <div className="flex flex-col mt-7">
             <p className="text-sm font-semibold">Payment details</p>
