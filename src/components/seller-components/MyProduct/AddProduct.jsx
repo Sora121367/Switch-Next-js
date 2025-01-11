@@ -12,59 +12,70 @@ const AddProduct = ({ onBack }) => {
     price: "",
     instock: true,
     image: null,
-    size: [], // Track sizes in Attributes tab
+    //method_payment: "",
+    size: "", // Added to track sizes selected in the Attributes tab
   });
   const [message, setMessage] = useState("");
 
   const handleSave = async (e) => {
     e.preventDefault();
-
-    const { title, price, description, image } = formData;
-
-    // Basic validation
-    if (!title || !price || !description || !image) {
-      setMessage("All fields, including title, price, description, and image, are required.");
+  
+    const { title, price, description, instock, image, size } = formData;
+  
+    // Validation check, ensure all fields are properly filled
+    if (!title || !price || !description || !image || size.length === 0) {
+      setMessage("All fields, including size, are required. Please fill in all the details.");
       return;
     }
-
+  
     const formDataToSend = new FormData();
     formDataToSend.append("title", title);
     formDataToSend.append("price", price);
     formDataToSend.append("description", description);
-    formDataToSend.append("instock", formData.instock);
+    formDataToSend.append("instock", instock);
     formDataToSend.append("image", image);
-
+    formDataToSend.append("size",size)
+    
+    // Retrieve the token from local storage or wherever it is stored
+    const token = localStorage.getItem("token");  // Or wherever you store the token
+  
+    if (!token) {
+      setMessage("Authorization token is required. Please log in and try again.");
+      return;
+    }
+  
     try {
       const response = await fetch("/api/products", {
         method: "POST",
         body: formDataToSend,
+        headers: {
+          "Authorization": `Bearer ${token}`, // Add the Authorization header
+        },
       });
       const data = await response.json();
-
+  
       if (response.ok) {
         setMessage("Product created successfully!");
-        resetForm();
+        resetForm(); // Reset the form after saving
       } else {
-        console.error("API Error:", data);
-        setMessage(data.message || "Failed to create the product.");
+        setMessage(data.message || "Failed to create the product. Please check the details.");
       }
     } catch (error) {
       console.error("Error creating product:", error);
-      setMessage("An error occurred. Please try again later.");
+      setMessage("An error occurred while creating the product. Please try again later.");
     }
   };
-
+  
   const resetForm = () => {
-    if (window.confirm("Are you sure you want to reset the form?")) {
-      setFormData({
-        title: "",
-        description: "",
-        price: "",
-        instock: true,
-        image: null,
-        size: [],
-      });
-    }
+    setFormData({
+      title: "",
+      description: "",
+      price: "",
+      instock: true,
+      image: null,
+      //method_payment: "",
+      size: "" // Reset size as well
+    });
   };
 
   const tabs = [
@@ -73,65 +84,62 @@ const AddProduct = ({ onBack }) => {
     { name: "pickup", label: "Pickup" },
   ];
 
-  const tabComponents = {
-    general: General,
-    attributes: Attributes,
-    pickup: Pickup,
-  };
-
   const renderContent = () => {
-    const Component = tabComponents[activeItem];
-    return Component ? <Component formData={formData} setFormData={setFormData} /> : <div>Invalid Tab</div>;
+    switch (activeItem) {
+      case "general":
+        return <General formData={formData} setFormData={setFormData} />;
+      case "attributes":
+        return <Attributes formData={formData} setFormData={setFormData} />;
+      case "pickup":
+        return <Pickup formData={formData} setFormData={setFormData} />;
+      default:
+        return <div>Invalid Tab</div>;
+    }
   };
 
   return (
-    <div className="w-full p-4">
+    <div>
       {/* Header Section */}
-      <section className="p-6 flex flex-col md:flex-row justify-between gap-4 items-center">
+      <section className="p-6 flex justify-between gap-2 items-center">
         <div className="flex items-center gap-4">
-          <button
-            className="flex items-center text-lg font-medium text-[#0B5754]"
-            onClick={onBack}
-            aria-label="Go back"
-          >
+          <div className="flex items-center gap-2">
             <IoChevronBackOutline className="text-lg" />
-            Back
-          </button>
+            <button
+              className="text-lg font-medium text-[#0B5754]"
+              onClick={onBack}
+            >
+              Back
+            </button>
+          </div>
           <h2 className="text-xl font-semibold">Add New Product</h2>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap gap-4">
+        <div className="space-x-5 flex items-center">
           <button
             onClick={handleSave}
-            className="bg-[#0B5754] w-full md:w-[8rem] h-[2.4rem] text-white rounded hover:bg-[#084d4b]"
-            aria-label="Save product"
+            className="bg-[#0B5754] w-[8rem] h-[2.4rem] text-white rounded hover:bg-[#084d4b]"
           >
             Save Product
           </button>
-          <button
-            onClick={resetForm}
-            className="w-full md:w-[9rem] h-[2.4rem] rounded border border-black hover:bg-slate-500"
-            aria-label="Duplicate product"
-          >
+          <button className="w-[9rem] h-[2.4rem] rounded border border-black hover:bg-slate-500">
             Duplicate Product
           </button>
         </div>
       </section>
 
       {/* Tabs Section */}
-      <section className="w-full flex flex-col">
-        <div className="flex flex-wrap gap-6 mb-6">
+      <section className="p-10 w-full flex flex-col">
+        <div className="flex gap-6 mb-6">
           {tabs.map((tab) => (
             <button
               key={tab.name}
               onClick={() => setActiveItem(tab.name)}
-              className={`btn-active px-4 py-2 rounded ${
+              className={`btn-active ${
                 activeItem === tab.name
                   ? "text-white bg-[#0B5754]"
                   : "text-black hover:text-[#0B5754] hover:bg-gray-100"
               }`}
-              aria-label={`Switch to ${tab.label} tab`}
             >
               {tab.label}
             </button>
@@ -139,7 +147,9 @@ const AddProduct = ({ onBack }) => {
         </div>
 
         {/* Dynamic Tab Content */}
-        <div className="flex-grow p-6 rounded-lg shadow-md bg-white">{renderContent()}</div>
+        <div className="flex-grow p-6 rounded-lg shadow-md bg-white">
+          {renderContent()}
+        </div>
       </section>
 
       {/* Display Message */}
