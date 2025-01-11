@@ -26,7 +26,7 @@ const MyProduct = () => {
         const response = await fetch("/api/getProduct", {
           method: "GET",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/jso  n",
             Authorization: `Bearer ${token}`, 
           },
         });
