@@ -12,7 +12,7 @@ const AddProduct = ({ onBack }) => {
     price: "",
     instock: true,
     image: null,
-    //method_payment: "",
+    method_payment: "",
     size: "", // Added to track sizes selected in the Attributes tab
   });
   const [message, setMessage] = useState("");
