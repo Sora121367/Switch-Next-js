@@ -63,7 +63,7 @@ const General = ({ formData, setFormData }) => {
       </div>
 
       {/* Product Details Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-3 gap-4 mb-6">
         <div>
           <label
             htmlFor="nameProduct"
@@ -101,7 +101,7 @@ const General = ({ formData, setFormData }) => {
       </div>
 
       {/* Product Availability Section */}
-      <div className=" right-8 top-10 sm:right-8 sm:top-2 sm:w-auto sm:max-w-[14rem] ">
+      <div className="absolute right-8 top-10">
         <ProductAvailability formData={formData} setFormData={setFormData} />
       </div>
     </form>
