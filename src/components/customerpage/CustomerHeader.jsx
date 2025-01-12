@@ -11,7 +11,7 @@ const CustomerHeader = () => {
   const {user,loading} = useAuth();
 
   return (
-    <header className="top-0 left-0 right-0 z-50 py-5 text-white  shadow-md">
+    <header className="top-0 bg-green-950 left-0 right-0 z-50 py-5 text-white  shadow-md">
       <nav className="max-w-7xl mx-auto px-4 flex justify-between items-center">
         {/* Logo and Dropdowns */}
         <div className="flex items-center gap-8">
