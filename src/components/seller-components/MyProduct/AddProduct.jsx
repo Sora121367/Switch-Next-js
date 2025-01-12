@@ -1,8 +1,32 @@
 import React, { useState } from "react";
 import { IoChevronBackOutline } from "react-icons/io5";
+import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 import General from "./General";
 import Attributes from "./Attributes";
 import Pickup from "./Pickup";
+
+const PopupMessage = ({ message, type, onClose }) => (
+  <div
+    className={`fixed top-4 right-4 flex items-center gap-3 p-4 rounded-md shadow-md transition-all ${
+      type === "success"
+        ? "bg-green-100 text-green-700"
+        : "bg-red-100 text-red-700"
+    }`}
+  >
+    {type === "success" ? (
+      <AiOutlineCheckCircle size={24} />
+    ) : (
+      <AiOutlineCloseCircle size={24} />
+    )}
+    <span>{message}</span>
+    <button
+      onClick={onClose}
+      className="text-lg font-bold text-gray-500 hover:text-black"
+    >
+      ×
+    </button>
+  </div>
+);
 
 const AddProduct = ({ onBack }) => {
   const [activeItem, setActiveItem] = useState("general");
@@ -12,60 +36,65 @@ const AddProduct = ({ onBack }) => {
     price: "",
     instock: true,
     image: null,
-    //method_payment: "",
-    size: "", // Added to track sizes selected in the Attributes tab
+    category: "",
+    size: "",
   });
   const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // "success" or "error"
 
   const handleSave = async (e) => {
     e.preventDefault();
-  
-    const { title, price, description, instock, image, size } = formData;
-  
-    // Validation check, ensure all fields are properly filled
+
+    const { title, price, description, instock, image, size, category } = formData;
+
     if (!title || !price || !description || !image || size.length === 0) {
+      setMessageType("error");
       setMessage("All fields, including size, are required. Please fill in all the details.");
       return;
     }
-  
+
     const formDataToSend = new FormData();
     formDataToSend.append("title", title);
     formDataToSend.append("price", price);
     formDataToSend.append("description", description);
     formDataToSend.append("instock", instock);
     formDataToSend.append("image", image);
-    formDataToSend.append("size",size)
-    
-    // Retrieve the token from local storage or wherever it is stored
-    const token = localStorage.getItem("token");  // Or wherever you store the token
-  
+    formDataToSend.append("category", category);
+    formDataToSend.append("size", size);
+
+    const token = localStorage.getItem("token");
+
     if (!token) {
+      setMessageType("error");
       setMessage("Authorization token is required. Please log in and try again.");
       return;
     }
-  
+
     try {
       const response = await fetch("/api/products", {
         method: "POST",
         body: formDataToSend,
         headers: {
-          "Authorization": `Bearer ${token}`, // Add the Authorization header
+          Authorization: `Bearer ${token}`,
         },
       });
       const data = await response.json();
-  
+
       if (response.ok) {
+        setMessageType("success");
         setMessage("Product created successfully!");
-        resetForm(); // Reset the form after saving
+        resetForm();
       } else {
+        setMessageType("error");
         setMessage(data.message || "Failed to create the product. Please check the details.");
       }
     } catch (error) {
       console.error("Error creating product:", error);
+      setMessageType("error");
       setMessage("An error occurred while creating the product. Please try again later.");
     }
   };
-  
+
   const resetForm = () => {
     setFormData({
       title: "",
@@ -73,8 +102,8 @@ const AddProduct = ({ onBack }) => {
       price: "",
       instock: true,
       image: null,
-      //method_payment: "",
-      size: "" // Reset size as well
+      category: "",
+      size: "",
     });
   };
 
@@ -99,7 +128,6 @@ const AddProduct = ({ onBack }) => {
 
   return (
     <div>
-      {/* Header Section */}
       <section className="p-6 flex justify-between gap-2 items-center">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
@@ -114,7 +142,6 @@ const AddProduct = ({ onBack }) => {
           <h2 className="text-xl font-semibold">Add New Product</h2>
         </div>
 
-        {/* Action Buttons */}
         <div className="space-x-5 flex items-center">
           <button
             onClick={handleSave}
@@ -128,7 +155,6 @@ const AddProduct = ({ onBack }) => {
         </div>
       </section>
 
-      {/* Tabs Section */}
       <section className="p-10 w-full flex flex-col">
         <div className="flex gap-6 mb-6">
           {tabs.map((tab) => (
@@ -146,14 +172,19 @@ const AddProduct = ({ onBack }) => {
           ))}
         </div>
 
-        {/* Dynamic Tab Content */}
         <div className="flex-grow p-6 rounded-lg shadow-md bg-white">
           {renderContent()}
         </div>
       </section>
 
-      {/* Display Message */}
-      {message && <p className="text-center text-red-500 mt-4">{message}</p>}
+      {/* Popup Message */}
+      {message && (
+        <PopupMessage
+          message={message}
+          type={messageType}
+          onClose={() => setMessage("")}
+        />
+      )}
     </div>
   );
 };

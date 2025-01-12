@@ -17,7 +17,7 @@ const ProductList = ({
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className=" container mx-auto p-4 ">
       <ul className="space-y-4">
         {products.map((product) => (
           <li
