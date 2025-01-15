@@ -8,9 +8,9 @@ const Product = async ({ params }) => {
 
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/get-productId?productId=${productId}`
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/get-productId?productId=${productId}`,
+      { cache: "no-store" }
     );
-
     if (!res.ok) {
       throw new Error("Product not found");
     }
