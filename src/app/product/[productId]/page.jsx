@@ -3,16 +3,16 @@ import ProductDetail from "./productDetail";
 import CustomerHeader from "@/components/customerpage/CustomerHeader";
 
 const Product = async ({ params }) => {
-  const { productId } =  params;
+  const { productId } = await  params;
+  
 
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/get-productId?productId=${productId}`,
       { cache: "no-store" }
     );
-
     if (!res.ok) {
-      throw new Error("Failed to fetch product details. Please try again later.");
+      throw new Error("Product not found");
     }
 
     const { product } = await res.json();
@@ -21,7 +21,6 @@ const Product = async ({ params }) => {
       return (
         <div className="p-10">
           <h1 className="text-2xl font-bold text-red-500">Product not found</h1>
-          <p className="text-gray-600">The product you are looking for does not exist or is currently unavailable.</p>
         </div>
       );
     }
@@ -29,10 +28,12 @@ const Product = async ({ params }) => {
     const { title, description, price, image = [], instock, size } = product;
 
     return (
+
       <div>
-        <div className="bg-[#1E1E1E]">
-          <CustomerHeader />
-        </div>
+         
+         <div className="bg-[#1E1E1E]">
+          <CustomerHeader/>
+         </div>
 
         <ProductDetail
           title={title}
@@ -45,14 +46,10 @@ const Product = async ({ params }) => {
       </div>
     );
   } catch (error) {
-    console.error("Error fetching product details:", error.message);
+    console.error(error);
     return (
       <div className="p-10">
-        <h1 className="text-2xl font-bold text-red-500">Error</h1>
-        <p className="text-gray-600">{error.message}</p>
-        <p className="text-gray-500">
-          Please check your internet connection or try again later. If the problem persists, contact support.
-        </p>
+        <h1 className="text-2xl font-bold text-red-500">{error.message}</h1>
       </div>
     );
   }
