@@ -45,9 +45,9 @@ const DiscountProduct = () => {
       {!adddiscount ? (
         <div className="p-6 space-y-4">
           {/* Header Section */}
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-y-4 sm:gap-x-4">
             <button
-              className="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition"
+              className="px-4 py-2 bg-green-700 text-white rounded-md hover:bg-green-800 transition w-full sm:w-auto"
               onClick={() => setDiscount(!adddiscount)}
             >
               + Add new discount
@@ -55,7 +55,7 @@ const DiscountProduct = () => {
             <input
               type="text"
               placeholder="Search by Product Discount"
-              className="w-1/3 p-2 border rounded-md outline-none"
+              className="w-full sm:w-1/3 p-2 border rounded-md outline-none mt-4 sm:mt-0"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -64,24 +64,24 @@ const DiscountProduct = () => {
               disabled={selectedProducts.length === 0}
               className={`px-4 py-2 bg-black text-white rounded-md ${
                 selectedProducts.length === 0 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-800"
-              }`}
+              } w-full sm:w-auto mt-4 sm:mt-0`}
             >
               Delete selected products
             </button>
           </div>
 
           {/* Product List */}
-          <div className="space-y-4">
+          <div className="space-y-4 mt-6">
             {filteredProducts.length === 0 ? (
               <p className="text-center text-gray-500">No products found.</p>
             ) : (
               filteredProducts.map((product) => (
                 <div
                   key={product.id}
-                  className="flex justify-between items-center p-4 border rounded-md shadow-sm"
+                  className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-4 border rounded-md shadow-sm"
                 >
                   {/* Product Content */}
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-start sm:items-center gap-4 w-full sm:w-auto">
                     <input
                       type="checkbox"
                       checked={selectedProducts.includes(product.id)}
@@ -93,7 +93,7 @@ const DiscountProduct = () => {
                       alt={product.name}
                       className="w-16 h-16 object-cover rounded"
                     />
-                    <div className="flex flex-col items-start gap-y-1">
+                    <div className="flex flex-col items-start gap-y-1 w-full sm:w-auto">
                       <h2 className="text-lg font-semibold">{product.name}</h2>
                       <p className="text-sm text-green-600">
                         {product.active ? "Active" : "Inactive"}
@@ -103,7 +103,7 @@ const DiscountProduct = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex flex-col items-end">
+                  <div className="flex flex-col items-start sm:items-end w-full sm:w-auto mt-4 sm:mt-0">
                     <p className="text-gray-400 line-through">
                       ${product.originalPrice.toFixed(2)}
                     </p>
@@ -124,7 +124,7 @@ const DiscountProduct = () => {
         </div>
       ) : (
         <div>
-          <AddProductDiscount onBack = {()=>setDiscount(false)}/>
+          <AddProductDiscount onBack={() => setDiscount(false)} />
         </div>
       )}
     </div>

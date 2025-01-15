@@ -2,7 +2,7 @@ import React from "react";
 
 const CustomerProduct = ({ title, description, price, image }) => {
   return (
-    <div className="w-[20rem] rounded-lg bg-white shadow-md hover:shadow-lg transition-shadow duration-300">
+    <div className="w-[20rem] rounded-lg bg-white shadow-md cursor-pointer hover:shadow-lg transition-shadow duration-300">
       <div className="flex flex-col">
         {/* Image Section */}
         <div className="w-[20rem] h-[14rem] flex items-center justify-center ">

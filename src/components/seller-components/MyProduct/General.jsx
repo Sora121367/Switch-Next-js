@@ -1,25 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { IoChevronBackOutline } from "react-icons/io5";
 import ProductAvailability from "./ProductAvailability"; // Assuming you have this component
 
 const General = ({ formData, setFormData }) => {
-  // Removed local image state
+  // Handle file input change (for multiple images)
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFormData({ ...formData, image: file }); // Update formData state with the file
+    const files = event.target.files;
+    if (files) {
+      const updatedImages = [...formData.image];
+      for (let i = 0; i < files.length; i++) {
+        updatedImages.push(files[i]); // Add new images to the existing array
+      }
+      setFormData({ ...formData, image: updatedImages }); // Update formData with multiple images
     }
   };
 
-  // Handle input changes
-  const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    setFormData({ ...formData, [id]: value });
-  };
-
   // Handle cancel image upload
-  const handleCancelImage = () => {
-    setFormData({ ...formData, image: null }); // Remove image from formData
+  const handleCancelImage = (index) => {
+    const updatedImages = formData.image.filter((_, i) => i !== index); // Remove the selected image
+    setFormData({ ...formData, image: updatedImages });
   };
 
   return (
@@ -36,29 +35,33 @@ const General = ({ formData, setFormData }) => {
             className="opacity-0 absolute inset-0 cursor-pointer"
             id="productImage"
             accept="image/*"
+            multiple // Allow multiple file selection
           />
           <span className="text-lg font-medium">
-            {formData.image ? "Replace Image" : "+ Upload Image"}
+            {formData.image.length > 0 ? "Add More Images" : "+ Upload Images"}
           </span>
         </div>
 
-        {formData.image && (
-          <>
-            <div className="absolute mt-9">
-              <img
-                src={URL.createObjectURL(formData.image)} // Using formData.image directly
-                alt="Product Preview"
-                className="h-60 object-contain rounded-lg"
-              />
-            </div>
-            <button
-              onClick={handleCancelImage}
-              className="absolute top-3 left-[15rem] p-5"
-              type="button"
-            >
-              <IoChevronBackOutline className="text-3xl hover:text-white" />
-            </button>
-          </>
+        {/* Display uploaded images */}
+        {formData.image.length > 0 && (
+          <div className="flex gap-4 mt-4">
+            {formData.image.map((image, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={URL.createObjectURL(image)} // Preview the image
+                  alt={`Product Preview ${index + 1}`}
+                  className="h-60 object-contain rounded-lg"
+                />
+                <button
+                  onClick={() => handleCancelImage(index)}
+                  className="absolute top-0 right-0 p-2 bg-gray-500 text-white rounded-full"
+                  type="button"
+                >
+                  <IoChevronBackOutline className="text-2xl" />
+                </button>
+              </div>
+            ))}
+          </div>
         )}
       </div>
 
@@ -75,7 +78,7 @@ const General = ({ formData, setFormData }) => {
             type="text"
             id="title"
             placeholder="Enter product name"
-            onChange={handleInputChange}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             value={formData.title || ""}
             className="mt-1 p-2 w-full border border-gray-300 rounded"
           />
@@ -95,7 +98,7 @@ const General = ({ formData, setFormData }) => {
           rows="4"
           placeholder="Enter product description"
           value={formData.description || ""}
-          onChange={handleInputChange}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           className="mt-1 p-2 w-full border border-gray-300 rounded"
         ></textarea>
       </div>

@@ -58,13 +58,10 @@ const Customer = () => {
 
           <div className="w-full flex items-center justify-between gap-4 mb-4">
             <div className="flex items-center gap-6 px-3">
-              <span className="text-[#0B5754] font-medium cursor-pointer hover:underline">
-                Select
-              </span>
+              <span className="text-[#0B5754] font-medium cursor-pointer hover:underline">Select</span>
               <button
                 onClick={() => setShowSection(true)}
-                className="border rounded px-4 py-1"
-              >
+                className="border rounded px-4 py-1">
                 Mass Update
               </button>
             </div>

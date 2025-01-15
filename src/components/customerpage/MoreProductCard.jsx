@@ -3,7 +3,7 @@ import React from "react";
 const MoreProductCard = ({ title, price, image }) => {
   return (
     <div>
-      <div className="w-[20rem] bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+      <div className="w-[20rem] bg-white rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow duration-300">
         <div className="flex flex-col">
           {/* Image Section */}
           <div className="w-[20rem] h-[24rem] flex items-center justify-center overflow-hidden">

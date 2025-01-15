@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
@@ -35,41 +37,45 @@ const AddProduct = ({ onBack }) => {
     description: "",
     price: "",
     instock: true,
-    image: null,
-    category: "",
-    size: "",
+    image: "",
+    //method_payment: "",
+    size: "", // Added to track sizes selected in the Attributes tab
   });
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState(""); // "success" or "error"
 
   const handleSave = async (e) => {
     e.preventDefault();
-
+  
     const { title, price, description, instock, image, size, category } = formData;
-
-    if (!title || !price || !description || !image || size.length === 0) {
+  
+    if (!title || !price || !description || image.length === 0 || size.length === 0) {
       setMessageType("error");
-      setMessage("All fields, including size, are required. Please fill in all the details.");
+      setMessage("All fields, including size and at least one image, are required.");
       return;
     }
-
+  
     const formDataToSend = new FormData();
     formDataToSend.append("title", title);
     formDataToSend.append("price", price);
     formDataToSend.append("description", description);
     formDataToSend.append("instock", instock);
-    formDataToSend.append("image", image);
     formDataToSend.append("category", category);
     formDataToSend.append("size", size);
-
+  
+    // Append multiple images to FormData
+    image.forEach((img, index) => {
+      formDataToSend.append("image", img); // Append each image individually
+    });
+  
     const token = localStorage.getItem("token");
-
+  
     if (!token) {
       setMessageType("error");
       setMessage("Authorization token is required. Please log in and try again.");
       return;
     }
-
+  
     try {
       const response = await fetch("/api/products", {
         method: "POST",
@@ -78,8 +84,9 @@ const AddProduct = ({ onBack }) => {
           Authorization: `Bearer ${token}`,
         },
       });
+  
       const data = await response.json();
-
+  
       if (response.ok) {
         setMessageType("success");
         setMessage("Product created successfully!");
@@ -94,14 +101,14 @@ const AddProduct = ({ onBack }) => {
       setMessage("An error occurred while creating the product. Please try again later.");
     }
   };
-
+  
   const resetForm = () => {
     setFormData({
       title: "",
       description: "",
       price: "",
       instock: true,
-      image: null,
+      image: "",
       category: "",
       size: "",
     });

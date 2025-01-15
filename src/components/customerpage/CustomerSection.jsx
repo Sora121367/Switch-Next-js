@@ -1,7 +1,7 @@
-"use client";
 import React from "react";
 import CustomerProduct from "./CustomerProduct";
 import MoreProductCard from "./MoreProductCard";
+import Link from "next/link";
 
 const CustomerSection = ({ products }) => {
   const firstProducts = products.slice(0, 4);
@@ -11,7 +11,7 @@ const CustomerSection = ({ products }) => {
     <div className="w-full min-h-screen bg-white">
       {/* Header Section */}
       <div className="w-full h-1/2 p-10 flex items-center">
-        <div className="w-[34rem] bg-white rounded-lg shadow-lg flex items-center overflow-hidden">
+        <div className="w-[34rem] bg-white rounded-lg shadow-lg overflow-hidden flex">
           <div className="p-6">
             <h1 className="text-4xl font-bold text-black leading-tight mb-4">
               Discover <br /> Local Shops
@@ -23,13 +23,11 @@ const CustomerSection = ({ products }) => {
               Learn more
             </button>
           </div>
-          <div className="md:w-1/2">
-            <img
-              src="/image6.png"
-              alt="Local Shop"
-              className="w-48 object-cover"
-            />
-          </div>
+          <img
+            src="/image6.png"
+            alt="Local shop illustration"
+            className="w-48 object-cover"
+          />
         </div>
       </div>
 
@@ -59,11 +57,13 @@ const CustomerSection = ({ products }) => {
         <ul className="p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {moreProducts.map((product) => (
             <li key={product.id} className="flex justify-center gap-3">
-              <MoreProductCard
-                title={product.title}
-                price={product.price}
-                image={product.image}
-              />
+              <Link href={`/product/${product._id}`}>
+                <MoreProductCard
+                  title={product.title}
+                  price={product.price}
+                  image={product.image[0]}
+                />
+              </Link>
             </li>
           ))}
         </ul>

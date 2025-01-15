@@ -29,7 +29,6 @@ const Customer = () => {
   ]);
 
   const [selectedOrders, setSelectedOrders] = useState([]);
-
   const [showSection, setShowSection] = useState(false);
 
   // Handlers
@@ -37,7 +36,7 @@ const Customer = () => {
     setCustomerOrders((prevOrders) =>
       prevOrders.filter((order) => !selectedOrders.includes(order.id))
     );
-    setSelectedOrders([]); // Clear selection after deletion
+    setSelectedOrders([]);
   };
 
   const handleCheckboxChange = (id) => {
@@ -57,27 +56,20 @@ const Customer = () => {
             <h2 className="text-xl font-semibold">Customer’s orders</h2>
           </div>
 
-          <div className="w-full flex items-center justify-between gap-4 mb-4">
+          <div className="w-full flex items-center justify-between gap-4 mb-4 flex-wrap">
             <div className="flex items-center gap-6 px-3">
-              <span className="text-[#0B5754] font-medium cursor-pointer hover:underline">
-                Select
-              </span>
+              <span className="text-[#0B5754] font-medium cursor-pointer hover:underline">Select</span>
               <button
                 onClick={() => setShowSection(true)}
-                className="border rounded px-4 py-1"
-              >
-                Mass Update
-              </button>
+                className="border rounded px-4 py-1">Mass Update</button>
             </div>
-
             <input
               type="text"
               placeholder="Search by name, email, or zip"
-              className="border p-2 rounded-lg w-[34rem]"
+              className="border p-2 rounded-lg w-full md:w-[34rem]"
             />
 
-            {/* Placeholder for Delete Button */}
-            <div className="w-56">
+            <div className="w-56 text-right">
               {selectedOrders.length > 0 ? (
                 <button
                   className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
@@ -85,9 +77,7 @@ const Customer = () => {
                 >
                   Delete Selected ({selectedOrders.length})
                 </button>
-              ) : (
-                <div></div> // Empty div to maintain space
-              )}
+              ) : null}
             </div>
           </div>
 
@@ -99,7 +89,7 @@ const Customer = () => {
               customerOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="flex justify-between items-center border-b p-4"
+                  className="flex justify-between items-center border-b p-4 flex-wrap gap-4"
                 >
                   <div className="flex items-center gap-4">
                     <input
@@ -138,7 +128,7 @@ const Customer = () => {
           </div>
         </div>
       ) : (
-        <CustomerDetails onBack ={() => setShowSection(false)}  />
+        <CustomerDetails onBack={() => setShowSection(false)} />
       )}
     </>
   );

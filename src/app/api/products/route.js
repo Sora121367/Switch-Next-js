@@ -33,9 +33,9 @@ export async function POST(req) {
     const instock = formData.get("instock") === "true";
     const category = formData.get("category");
     const size = formData.get("size")?.split(",") || [];
-    const image = formData.get("image");
+    const images = formData.getAll("image");  // Get all images
 
-    if (!title || !price || !description || !image || !category) {
+    if (!title || !price || !description || images.length === 0 || !category) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
@@ -59,9 +59,13 @@ export async function POST(req) {
       );
     }
 
-    let uploadedImage;
+    // Handle multiple image uploads
+    let uploadedImages = [];
     try {
-      uploadedImage = await streamUpload(image, "products");
+      for (let image of images) {
+        const uploadedImage = await streamUpload(image, "products");
+        uploadedImages.push(uploadedImage.secure_url);
+      }
     } catch (err) {
       console.error("Image Upload Error:", err);
       return NextResponse.json(
@@ -78,7 +82,7 @@ export async function POST(req) {
       instock,
       category,
       size,
-      image: uploadedImage.secure_url,
+      image: uploadedImages, // Store multiple image URLs
     });
 
     await newProduct.save();
