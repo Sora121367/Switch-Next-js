@@ -1,5 +1,5 @@
 import React from "react";
-import ProductDetail from "./ProductDetail";
+import ProductDetail from "./productDetail";
 import CustomerHeader from "@/components/customerpage/CustomerHeader";
 
 const Product = async ({ params }) => {
