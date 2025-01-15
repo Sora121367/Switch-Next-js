@@ -3,7 +3,7 @@ import ProductDetail from "./productDetail";
 import CustomerHeader from "@/components/customerpage/CustomerHeader";
 
 const Product = async ({ params }) => {
-  const { productId } = await params;
+  const { productId } =  params;
 
   try {
     const res = await fetch(
