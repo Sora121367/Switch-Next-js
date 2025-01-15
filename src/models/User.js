@@ -1,4 +1,6 @@
+import { profile } from "console";
 import mongoose from "mongoose";
+import { type } from "os";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -17,6 +19,10 @@ const UserSchema = new mongoose.Schema(
       minLength: [3],
       maxLength: [20],
       trim: true, // Removes extra spaces
+    },
+    profile_picture:{
+    type: String,
+    require: true,
     },
     role: {
       type: String,

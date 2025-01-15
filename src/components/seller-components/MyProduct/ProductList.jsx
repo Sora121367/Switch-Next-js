@@ -15,9 +15,9 @@ const ProductList = ({
   const toggleMenu = (productId) => {
     setActiveMenu((prev) => (prev === productId ? null : productId)); // Toggle dropdown
   };
-
+  
   return (
-    <div className="container mx-auto p-4">
+    <div className=" container mx-auto p-4 ">
       <ul className="space-y-4">
         {products.map((product) => (
           <li
@@ -35,10 +35,12 @@ const ProductList = ({
 
             {/* Product image */}
             <img
-              src={product.image || "/placeholder-image.jpg"}
+              src={product.image[0] || "/placeholder-image.jpg"}
               alt={product.title || "Product image"}
               className="w-16 h-16 object-cover rounded-md"
+              
             />
+            
 
             {/* Product details */}
             <div className="flex-1 px-4">

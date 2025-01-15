@@ -2,35 +2,11 @@ import { NextResponse } from "next/server";
 import connectDB from "@/Utils/db";
 import Product from "@/models/Product";
 import User from "@/models/User";
-import cloudinary from "cloudinary";
 import jwt from "jsonwebtoken";
-import { Readable } from "stream";
-
-// Cloudinary configuration
-cloudinary.config({
-  cloud_name: process.env.CLOUD_NAME,
-  api_key: process.env.CLOUD_API_KEY,
-  api_secret: process.env.CLOUD_API_SECRET,
-});
-
-// Helper function to upload the image stream to Cloudinary
-async function streamUpload(file) {
-  return new Promise((resolve, reject) => {
-    const stream = cloudinary.v2.uploader.upload_stream(
-      { folder: "products" },
-      (error, result) => {
-        if (result) resolve(result);
-        else reject(error);
-      }
-    );
-    const readableStream = Readable.from(file.stream());
-    readableStream.pipe(stream);
-  });
-}
+import { streamUpload } from "@/Utils/cloudinary";
 
 export async function POST(req) {
   try {
-    // Extract token from Authorization header
     const token = req.headers.get("Authorization")?.split(" ")[1];
     if (!token) {
       return NextResponse.json(
@@ -39,7 +15,6 @@ export async function POST(req) {
       );
     }
 
-    // Verify token
     let user_Id;
     try {
       const decoded = jwt.verify(token, process.env.JWT_KEY);
@@ -52,16 +27,15 @@ export async function POST(req) {
     }
 
     const formData = await req.formData();
-
-    // Extract and validate fields
     const title = formData.get("title");
     const price = parseFloat(formData.get("price"));
     const description = formData.get("description");
     const instock = formData.get("instock") === "true";
+    const category = formData.get("category");
     const size = formData.get("size")?.split(",") || [];
-    const image = formData.get("image"); // File instance
+    const images = formData.getAll("image");  // Get all images
 
-    if (!title || !price || !description || !image) {
+    if (!title || !price || !description || images.length === 0 || !category) {
       return NextResponse.json(
         { message: "Missing required fields" },
         { status: 400 }
@@ -75,10 +49,8 @@ export async function POST(req) {
       );
     }
 
-    // Connect to the database
     await connectDB();
 
-    // Verify user exists
     const user = await User.findById(user_Id);
     if (!user) {
       return NextResponse.json(
@@ -87,10 +59,13 @@ export async function POST(req) {
       );
     }
 
-    // Upload image to Cloudinary using stream
-    let uploadedImage;
+    // Handle multiple image uploads
+    let uploadedImages = [];
     try {
-      uploadedImage = await streamUpload(image);
+      for (let image of images) {
+        const uploadedImage = await streamUpload(image, "products");
+        uploadedImages.push(uploadedImage.secure_url);
+      }
     } catch (err) {
       console.error("Image Upload Error:", err);
       return NextResponse.json(
@@ -99,18 +74,17 @@ export async function POST(req) {
       );
     }
 
-    // Create a new product
     const newProduct = new Product({
       user_Id,
       title,
       price,
       description,
       instock,
-      size, // Ensure size is an array
-      image: uploadedImage.secure_url, // Use the Cloudinary URL
+      category,
+      size,
+      image: uploadedImages, // Store multiple image URLs
     });
 
-    // Save the product
     await newProduct.save();
 
     return NextResponse.json(
@@ -128,4 +102,3 @@ export async function POST(req) {
     );
   }
 }
-//product

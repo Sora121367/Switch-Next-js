@@ -52,6 +52,29 @@ const Attributes = ({ formData, setFormData }) => {
             </li>
           ))}
         </ul>
+
+        
+      </div>
+      {/* Category Dropdown */}
+      <div>
+        <label htmlFor="category" className="font-bold">Category</label>
+        <select
+          name="category"
+          id="category"
+          className="w-full p-2 mt-2 border rounded"
+          onChange={(e) =>
+            setFormData((prevFormData) => ({
+              ...prevFormData,
+              category: e.target.value,
+            }))
+          }
+          value={formData.category || ""}
+        >
+          <option value="" disabled>Select a category</option>
+          <option value="clothes">Fashion</option>
+          <option value="shoes">Shoes</option>
+          <option value="accessories">Animal</option>
+        </select>
       </div>
     </div>
   );

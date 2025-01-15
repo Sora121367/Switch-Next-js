@@ -1,4 +1,3 @@
-// pages/product.js
 import React from 'react';
 import Image from 'next/image';
 import { FaInstagram, FaFacebook } from 'react-icons/fa';
@@ -6,6 +5,9 @@ import { FaTelegram } from "react-icons/fa";
 import Footer from '../Shoppayment/Footer';
 
 const CheckoutProduct = () => {
+  // Define sizes array
+  const sizes = ['S', 'M', 'L', 'XL'];
+
   return (
     <div className="bg-slate-100 min-h-screen flex flex-col">
       <div className="flex flex-col md:flex-row items-center md:items-start mt-20">
@@ -60,18 +62,15 @@ const CheckoutProduct = () => {
           <div className="mt-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Size</label>
             <div className="flex gap-2">
-              <div className="w-12 h-12 flex items-center justify-center border border-gray-300 rounded-full text-sm font-medium cursor-pointer shadow-md hover:bg-gray-200">
-                S
-              </div>
-              <div className="w-12 h-12 flex items-center justify-center border border-gray-300 rounded-full text-sm font-medium cursor-pointer shadow-md hover:bg-gray-200">
-                M
-              </div>
-              <div className="w-12 h-12 flex items-center justify-center border border-gray-300 rounded-full text-sm font-medium cursor-pointer shadow-md hover:bg-gray-200">
-                L
-              </div>
-              <div className="w-12 h-12 flex items-center justify-center border border-gray-300 rounded-full text-sm font-medium cursor-pointer shadow-md hover:bg-gray-200">
-                XL
-              </div>
+              {/* Map through sizes array */}
+              {sizes.map((size) => (
+                <div
+                  key={size}
+                  className="w-12 h-12 flex items-center justify-center border border-gray-300 rounded-full text-sm font-medium cursor-pointer shadow-md hover:bg-gray-200"
+                >
+                  {size}
+                </div>
+              ))}
             </div>
           </div>
           <div className="mt-6 flex flex-col gap-1">
