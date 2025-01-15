@@ -39,7 +39,7 @@ const ProductDetail = ({
       <div className="flex flex-col md:flex-row items-center md:items-start mt-20">
         {/* Image Container */}
         <div className="w-full md:w-1/2 p-4 flex flex-col items-center md:ml-40">
-          <div className="relative w-[22rem] h-[34rem] border-gray-300 rounded-2xl overflow-hidden flex items-center justify-center bg-white">
+          <div className="relative w-[25rem] h-[34rem] border-gray-300 rounded-2xl overflow-hidden flex items-center justify-center bg-white">
             <Image
               src={selectedImage}
               alt="Product"
@@ -110,7 +110,7 @@ const ProductDetail = ({
           <div className="mt-6 flex gap-4">
             {!showAddMore ? (
               <button
-                className={`bg-green-950 text-white py-2 px-4 rounded-md hover:bg-green-800 ${
+                className={`bg-green-950 text-white py-2 px-12 rounded-md hover:bg-green-800 ${
                   !instock || !selectedSize
                     ? "bg-gray-400 cursor-not-allowed"
                     : ""
