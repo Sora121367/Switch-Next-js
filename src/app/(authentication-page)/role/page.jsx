@@ -64,7 +64,7 @@ function Role() {
       const data = await response.json();
 
       if (response.ok) {
-        router.push(role === "seller" ? "/my-products" : "/customerpage");
+        router.push(role === "seller" ? "/shopowner-verification/setup" : "/customerpage");
       } else {
         setError(data.message || "Failed to set role. Please try again.");
       }

@@ -165,9 +165,6 @@ const MyProduct = () => {
                   + Add new Product
                 </button>
 
-                <button className="w-36 h-10 border-2 border-black outline-none text-md rounded-lg hover:bg-[#d3e1e0]">
-                  Bulk Edit
-                </button>
 
                 <input
                   type="text"

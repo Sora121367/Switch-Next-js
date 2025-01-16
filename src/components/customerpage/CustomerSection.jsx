@@ -6,9 +6,9 @@ import Link from "next/link";
 const CustomerSection = ({ products }) => {
   
   return (
-    <div className="w-full min-h-screen bg-white">
+    <div className="w-full bg-white">
       {/* Header Section */}
-      <div className="w-full h-1/2 p-10 flex items-center">
+      <div className="w-full p-10 flex items-center">
         <div className="w-[34rem] bg-white rounded-lg shadow-lg overflow-hidden flex">
           <div className="p-6">
             <h1 className="text-4xl font-bold text-black leading-tight mb-4">
@@ -34,7 +34,7 @@ const CustomerSection = ({ products }) => {
         <div className="px-6">
           <h1 className="text-2xl font-bold">Shop by category</h1>
         </div>
-        <ul className="p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <ul className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {firstProducts.map((product) => (
             <li key={product.id} className="flex justify-center gap-3">
               <CustomerProduct
@@ -48,7 +48,7 @@ const CustomerSection = ({ products }) => {
         </ul>
       </div> */}
 
-      <div className="p-10 w-full h-[100vh]">
+      <div className="p-6 w-full">
         <div className="flex flex-col items-center justify-center">
           <h1 className="text-2xl font-bold">More products</h1>
         </div>
