@@ -5,13 +5,25 @@ import { IoHeartOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { CiSearch } from "react-icons/ci";
 import { IoMdNotificationsOutline } from "react-icons/io";
+import { FaShoppingCart } from "react-icons/fa"; // Cart Icon
+import { useCart } from "@/components/context/CartContext"; // Import useCart hook
+import Cart from "@/components/items/cart"
 
 const CustomerHeader = ({ category, onCategoryChange }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth(); // Assuming you have a logout function
+  const { cart } = useCart(); // Access the cart from context
+  const [isCartOpen, setIsCartOpen] = useState(false); // State to control cart modal visibility
+
+  // Calculate total number of items in the cart (sum of quantities)
+  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+
+  const toggleCart = () => {
+    setIsCartOpen(!isCartOpen); // Toggle the cart modal
+  };
 
   return (
-    <header className="top-0 left-0 right-0 z-50 py-5 text-white  shadow-md">
+    <header className="top-0 left-0 right-0 z-50 py-5 text-white shadow-md">
       <nav className="max-w-7xl mx-auto px-4 flex justify-between items-center">
         {/* Logo and Dropdowns */}
         <div className="flex items-center gap-8">
@@ -38,9 +50,10 @@ const CustomerHeader = ({ category, onCategoryChange }) => {
               className={`lg:w-64 lg:h-10 w-48 h-9 px-4 rounded-md bg-gray-700 border border-gray-600 text-sm text-white focus:outline-none transition-all duration-200 ${
                 isSearchOpen ? "block" : "hidden"
               }`}
+              aria-label="Search"
             />
             <CiSearch
-              aria-label="Search"
+              aria-label="Toggle search bar"
               className="hover:text-gray-400 cursor-pointer text-2xl -ml-8"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             />
@@ -49,16 +62,42 @@ const CustomerHeader = ({ category, onCategoryChange }) => {
           <IoMdNotificationsOutline className="hover:text-gray-400 cursor-pointer text-2xl" />
           <IoHeartOutline className="hover:text-gray-400 cursor-pointer text-2xl" />
 
+          {/* Cart Icon with Item Count */}
+          <div className="relative">
+            <FaShoppingCart
+              className="hover:text-gray-400 cursor-pointer text-2xl"
+              onClick={toggleCart} // Toggle cart visibility
+            />
+            {totalItems > 0 && (
+              <span className="absolute -top-3 left-5 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {totalItems}
+              </span>
+            )}
+          </div>
+
           <div className="flex items-center gap-3">
             <FaUser className="hover:text-gray-400 cursor-pointer text-2xl" />
             {loading ? (
               <p className="text-base">Loading...</p>
             ) : (
-              <p className="text-base">{user?.username || "Guest"}</p>
+              <>
+                <p className="text-base">{user?.username || "Guest"}</p>
+                {user && (
+                  <button
+                    onClick={logout} // Assuming you have a logout function in useAuth
+                    className="text-base text-gray-400 hover:text-gray-200"
+                  >
+                    Logout
+                  </button>
+                )}
+              </>
             )}
           </div>
         </div>
       </nav>
+
+      {/* Render the Cart Modal */}
+      <Cart isOpen={isCartOpen} closeCart={toggleCart} />
     </header>
   );
 };

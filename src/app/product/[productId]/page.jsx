@@ -3,14 +3,15 @@ import ProductDetail from "./productDetail";
 import CustomerHeader from "@/components/customerpage/CustomerHeader";
 
 const Product = async ({ params }) => {
-  const { productId } = await  params;
-  
+  const { productId } = await params;
 
   try {
+    // Fetch product details based on productId
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/get-productId?productId=${productId}`,
       { cache: "no-store" }
     );
+
     if (!res.ok) {
       throw new Error("Product not found");
     }
@@ -28,13 +29,13 @@ const Product = async ({ params }) => {
     const { title, description, price, image = [], instock, size } = product;
 
     return (
-
       <div>
-         
-         <div className="bg-[#1E1E1E]">
-          <CustomerHeader/>
-         </div>
+        {/* Include CustomerHeader at the top */}
+        <div className="bg-[#1E1E1E]">
+          <CustomerHeader />
+        </div>
 
+        {/* Product Detail Component */}
         <ProductDetail
           title={title}
           description={description}
