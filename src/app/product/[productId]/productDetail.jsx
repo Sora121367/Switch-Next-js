@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from "react";
+
+import { useState } from "react";
+import { useCart } from "@/components/context/CartContext";
 import Image from "next/image";
-import { FaInstagram, FaFacebook, FaTelegram } from "react-icons/fa";
-import Link from "next/link"; // Import Link for navigation
+import Link from "next/link";
 
 const ProductDetail = ({
   title,
@@ -12,27 +13,63 @@ const ProductDetail = ({
   instock,
   size,
 }) => {
-  const fallbackImage = "/default-image.png"; // Default fallback image
-
-  // Initialize state with the first image or fallback if none exist
-  const [selectedImage, setSelectedImage] = useState(image[0] || fallbackImage);
-  const [smallImages, setSmallImages] = useState(
-    Array.isArray(image) && image.length > 0 ? image : [fallbackImage, fallbackImage, fallbackImage]
-  );
+  const { cart, addToCart } = useCart(); // Get cart and function from context
+  const [selectedImage, setSelectedImage] = useState(image[0] || "/default-image.png");
   const [selectedSize, setSelectedSize] = useState(null);
   const [showAddMore, setShowAddMore] = useState(false);
 
-  // Handle image click to update the selected image
+  // Handle image selection
   const handleImageClick = (clickedImage) => setSelectedImage(clickedImage);
 
-  // Ensure `size` is always an array
-  const sizes = Array.isArray(size) ? size : [size];
-
-  // Handle size click to update selected size
+  // Handle size selection
   const handleSizeClick = (size) => setSelectedSize(size);
+  const handleAddToBagClick = async () => {
+    if (selectedSize && instock) {
+      const product = { title, price, size: selectedSize, image: selectedImage };
+  
+      const formData = new URLSearchParams();
+      formData.append("productId", title);  // Replace with actual product ID if necessary
+      formData.append("quantity", "1");
+      formData.append("title", title);
+      formData.append("price", price.toString());
+      formData.append("size", selectedSize);
+      formData.append("image", selectedImage);
+  
+      try {
+        const response = await fetch('/api/cart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
+          body: formData.toString(),  // Send the form data as a URL-encoded string
+        });
+  
+        if (!response.ok) {
+          const errorData = await response.json();
+        } else {
+          addToCart(product);
+          setShowAddMore(true);
+        }
+      } catch (error) {
+        console.error("Error adding item to cart:", error);
+        alert(`Error adding item to cart: ${error.message || 'Unknown error'}`);
+      }
+    } else {
+      console.error("Please select a size and ensure the product is in stock.");
+      alert("Please select a size and ensure the product is in stock.");
+    }
+  };
+  
+  
+  // Handle adding more items
+  const handleAddMoreClick = () => {
+    if (selectedSize && instock) {
+      addToCart({ title, price, size: selectedSize, image: selectedImage }); // Add another of the same item to cart
+    }
+  };
 
-  // Handle Add to Bag click
-  const handleAddToBagClick = () => setShowAddMore(true);
+  const sizes = Array.isArray(size) ? size : [size]; // Ensure size is always an array
 
   return (
     <div className="bg-slate-100 min-h-screen flex flex-col">
@@ -52,7 +89,7 @@ const ProductDetail = ({
 
           {/* Small Images */}
           <div className="flex gap-4 mt-4 justify-center md:justify-start">
-            {smallImages.map((smallImage, index) => (
+            {image.map((smallImage, index) => (
               <div
                 key={index}
                 onClick={() => handleImageClick(smallImage)}
@@ -111,9 +148,7 @@ const ProductDetail = ({
             {!showAddMore ? (
               <button
                 className={`bg-green-950 text-white py-2 px-12 rounded-md hover:bg-green-800 ${
-                  !instock || !selectedSize
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : ""
+                  !instock || !selectedSize ? "bg-gray-400 cursor-not-allowed" : ""
                 }`}
                 disabled={!instock || !selectedSize}
                 onClick={handleAddToBagClick}
@@ -121,13 +156,13 @@ const ProductDetail = ({
                 Add to Bag
               </button>
             ) : (
-              <div className="flex flex-col gap-3 ">
+              <div className="flex flex-col gap-3">
+                <Link href="/customerpage">
                 <button
                   className="bg-gray-300 text-black py-2 px-12 rounded-md hover:bg-gray-400"
-                  onClick={() => alert("Adding more items")}
                 >
                   Add More
-                </button>
+                </button></Link>
                 <Link href="/customerpay">
                   <button
                     className="bg-blue-600 text-white py-2 px-12 rounded-md hover:bg-blue-500"
@@ -144,20 +179,6 @@ const ProductDetail = ({
           <div className="mt-8">
             <h2 className="text-2xl font-bold">Product Details</h2>
             <p className="text-gray-600 mt-2">{description}</p>
-          </div>
-
-          {/* Social Media Links */}
-          <hr className="border-t-2 border-gray-300 my-4 w-full" />
-          <div className="flex space-x-4 mt-4 items-center justify-center">
-            <a href="https://www.instagram.com" target="_blank" aria-label="Instagram">
-              <FaInstagram size={24} className="text-gray-600 hover:text-red-800 transition-colors" />
-            </a>
-            <a href="https://www.facebook.com" target="_blank" aria-label="Facebook">
-              <FaFacebook size={24} className="text-gray-600 hover:text-blue-800 transition-colors" />
-            </a>
-            <a href="https://www.telegram.com" target="_blank" aria-label="Telegram">
-              <FaTelegram size={24} className="text-gray-600 hover:text-blue-500 transition-colors" />
-            </a>
           </div>
         </div>
       </div>

@@ -4,9 +4,7 @@ import MoreProductCard from "./MoreProductCard";
 import Link from "next/link";
 
 const CustomerSection = ({ products }) => {
-  const firstProducts = products.slice(0, 4);
-  const moreProducts = products.slice(4);
-
+  
   return (
     <div className="w-full min-h-screen bg-white">
       {/* Header Section */}
@@ -31,7 +29,7 @@ const CustomerSection = ({ products }) => {
         </div>
       </div>
 
-      {/* Product Section */}
+      {/* Product Section
       <div>
         <div className="px-6">
           <h1 className="text-2xl font-bold">Shop by category</h1>
@@ -48,14 +46,14 @@ const CustomerSection = ({ products }) => {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
 
       <div className="p-10 w-full h-[100vh]">
         <div className="flex flex-col items-center justify-center">
           <h1 className="text-2xl font-bold">More products</h1>
         </div>
         <ul className="p-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {moreProducts.map((product) => (
+          {products.map((product) => (
             <li key={product.id} className="flex justify-center gap-3">
               <Link href={`/product/${product._id}`}>
                 <MoreProductCard
