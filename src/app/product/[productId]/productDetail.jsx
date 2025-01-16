@@ -28,7 +28,7 @@ const ProductDetail = ({
       const product = { title, price, size: selectedSize, image: selectedImage };
   
       const formData = new URLSearchParams();
-      formData.append("productId", title);  // Replace with actual product ID if necessary
+      formData.append("productId", title);  
       formData.append("quantity", "1");
       formData.append("title", title);
       formData.append("price", price.toString());

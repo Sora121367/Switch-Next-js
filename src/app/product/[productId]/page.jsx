@@ -1,6 +1,7 @@
 import React from "react";
 import ProductDetail from "./productDetail";
 import CustomerHeader from "@/components/customerpage/CustomerHeader";
+import CusHeader from "@/components/customerpage/CusHeader";
 
 const Product = async ({ params }) => {
   const { productId } = await params;
@@ -31,8 +32,8 @@ const Product = async ({ params }) => {
     return (
       <div>
         {/* Include CustomerHeader at the top */}
-        <div className="bg-[#1E1E1E]">
-          <CustomerHeader />
+        <div className="bg-[#19341e]">
+          <CusHeader />
         </div>
 
         {/* Product Detail Component */}
