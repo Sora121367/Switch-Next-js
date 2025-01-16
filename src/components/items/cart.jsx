@@ -84,7 +84,6 @@ const Cart = ({ isOpen, closeCart }) => {
       console.error("Error removing item from cart:", error);
       alert("An error occurred while removing the item from your cart.");
     }
-    console.log(addToCart);
   };
   
 

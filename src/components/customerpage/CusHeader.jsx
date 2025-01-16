@@ -5,12 +5,16 @@ import { CiSearch } from "react-icons/ci";
 import { FiMenu } from "react-icons/fi";
 import { TfiClose } from "react-icons/tfi";
 import { IoHeartOutline } from "react-icons/io5";
-import { FaUser } from "react-icons/fa";
+import { FaShoppingCart, FaUser } from "react-icons/fa";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import Link from "next/link";
 import Image from "next/image";
+import { useCart } from "../context/CartContext";
+import { useRouter } from "next/navigation";
+import Cart from "../items/cart";
 
-const NavItems = ({ onClick = () => {},user,loading}) => (
+
+const NavItems = ({ onClick = () => {}, user, loading }) => (
   <div className="flex flex-col gap-8 lg:text-xl lg:flex-row">
     {/* Notification */}
     <IoMdNotificationsOutline className="hover:text-gray-400 cursor-pointer text-2xl" />
@@ -29,13 +33,25 @@ const NavItems = ({ onClick = () => {},user,loading}) => (
       )}
     </div>
   </div>
+  
 );
 
-const CusHeader = () => {
+const CusHeader = ({ category, onCategoryChange }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isSearchOpen, setSearchOpen] = useState(false);
   const { user, loading } = useAuth();
+  
 
+  const { cart } = useCart(); // Access the cart from context
+  const [isCartOpen, setIsCartOpen] = useState(false); // State to control cart modal visibility
+  const router = useRouter(); // Initialize router for navigation
+
+
+  const toggleCart = () => {
+    setIsCartOpen(!isCartOpen); // Toggle the cart modal
+  };
+  // Calculate total number of items in the cart (sum of quantities)
+  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
   return (
     <header className="top-0 left-0 right-0 z-50 py-5 text-white ">
       <nav className="container max-w-7xl mx-auto px-4 flex justify-between items-center ">
@@ -48,17 +64,21 @@ const CusHeader = () => {
             width={170}
             height={70}
           />
-          </Link>
-        <div className="flex flex-row items-center gap-4">
-            <select
-              name="Categories"
-              className="w-40 px-3 py-2 bg-gray-700 border border-gray-600 text-sm rounded-md text-white focus:outline-none"
-            >
-              <option value="fashion">Fashion</option>
-              <option value="animal">Animal</option>
-              <option value="material">Material</option>
-            </select>
-          </div>
+        </Link>
+        <div className="flex items-center gap-8">
+          <img src="/logo.png" alt="logo" className="w-24" />
+          <select
+            value={category}
+            onChange={(e) => onCategoryChange(e.target.value)}
+            className="w-48 px-3 py-2 bg-gray-700 border border-gray-600 text-sm rounded-md text-white focus:outline-none"
+          >
+            <option value="all">All</option>
+            <option value="fashion">Fashion</option>
+            <option value="animal">Animal</option>
+            <option value="shoes">Shoes</option>
+            <option value="material">Material</option>
+          </select>
+        </div>
         {/* Desktop Navigation */}
         <div className="hidden lg:flex">
           <NavItems user={user} loading={loading} />
@@ -71,7 +91,9 @@ const CusHeader = () => {
             <input
               type="text"
               placeholder="search..."
-              className={`lg:w-[200px] lg:h-[26px] w-[150px] h-[20px] px-3 rounded-md  bg-transparent border-[1px] outline-none text-sm  ${isSearchOpen ? 'flex' : 'hidden'} lg:flex`}
+              className={`lg:w-[200px] lg:h-[26px] w-[150px] h-[20px] px-3 rounded-md  bg-transparent border-[1px] outline-none text-sm  ${
+                isSearchOpen ? "flex" : "hidden"
+              } lg:flex`}
             />
             <CiSearch
               aria-label="Search"
@@ -79,7 +101,19 @@ const CusHeader = () => {
               onClick={() => setSearchOpen(!isSearchOpen)} // Toggle the search input visibility on small screens
             />
           </div>
+        </div>
 
+        {/* Cart Icon with Item Count */}
+        <div className="relative">
+          <FaShoppingCart
+            className="hover:text-gray-400 cursor-pointer text-2xl"
+            onClick={toggleCart} // Toggle cart visibility
+          />
+          {totalItems > 0 && (
+            <span className="absolute -top-3 left-5 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+              {totalItems}
+            </span>
+          )}
         </div>
 
         {/* Mobile Hamburger Menu */}
@@ -98,6 +132,8 @@ const CusHeader = () => {
           <NavItems onClick={() => setMenuOpen(false)} />
         </div>
       )}
+       {/* Render the Cart Modal */}
+       <Cart isOpen={isCartOpen} closeCart={toggleCart} />
     </header>
   );
 };

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter for navigation
 import useAuth from "@/useAuth";
 import { IoHeartOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
@@ -7,19 +8,26 @@ import { CiSearch } from "react-icons/ci";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { FaShoppingCart } from "react-icons/fa"; // Cart Icon
 import { useCart } from "@/components/context/CartContext"; // Import useCart hook
-import Cart from "@/components/items/cart"
+import Cart from "@/components/items/cart";
 
 const CustomerHeader = ({ category, onCategoryChange }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const { user, loading, logout } = useAuth(); // Assuming you have a logout function
+  const { user, loading, logout } = useAuth();
   const { cart } = useCart(); // Access the cart from context
   const [isCartOpen, setIsCartOpen] = useState(false); // State to control cart modal visibility
+  const router = useRouter(); // Initialize router for navigation
 
   // Calculate total number of items in the cart (sum of quantities)
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
   const toggleCart = () => {
     setIsCartOpen(!isCartOpen); // Toggle the cart modal
+  };
+
+  // Handle logout and navigate to "/"
+  const handleLogout = () => {
+    logout(); // Call the logout function from useAuth
+    router.push("/"); // Navigate to the homepage
   };
 
   return (
@@ -84,7 +92,7 @@ const CustomerHeader = ({ category, onCategoryChange }) => {
                 <p className="text-base">{user?.username || "Guest"}</p>
                 {user && (
                   <button
-                    onClick={logout} // Assuming you have a logout function in useAuth
+                    onClick={handleLogout} // Use handleLogout instead of logout
                     className="text-base text-gray-400 hover:text-gray-200"
                   >
                     Logout
