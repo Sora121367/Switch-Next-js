@@ -1,4 +1,5 @@
 import React from "react";
+import BookMarkButton from "./BookmarkButton";
 
 const CustomerProduct = ({ title, description, price, image }) => {
   return (
@@ -20,6 +21,7 @@ const CustomerProduct = ({ title, description, price, image }) => {
           <button className="mt-2 bg-[#0B5754] text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors duration-300">
             Add to Cart
           </button>
+          <BookMarkButton/>
         </div>
       </div>
     </div>

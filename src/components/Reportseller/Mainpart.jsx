@@ -1,12 +1,29 @@
-
 import React, { useState } from 'react';
 import Notification from './Notification';
+import useAuth from '@/useAuth';
 const Mainpart = () => {
   const [submitted, setSubmitted] = useState(false);
+  const {user,loading} = useAuth();
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Add your form submission logic here
+
+    // Collecting form data
+    const checkboxes = Array.from(event.target.querySelectorAll('input[type="checkbox"]'));
+    const textarea = event.target.querySelector('textarea');
+
+    const formData = {
+      user:user.username || "Guest",
+      reasons: checkboxes
+        .filter((checkbox) => checkbox.checked)
+        .map((checkbox) => checkbox.nextSibling.textContent.trim()),
+      additionalNotes: textarea.value.trim(),
+    };
+
+    // Saving form data to localStorage
+    localStorage.setItem('reportData', JSON.stringify(formData));
+
+    // Trigger notification
     setSubmitted(true);
 
     // Automatically hide the notification after 3 seconds
@@ -24,7 +41,7 @@ const Mainpart = () => {
       <div className="p-8 w-full max-w-md">
         {submitted && (
           <Notification
-            message="Thank you for letting us know.We will update and warn the seller."
+            message="Thank you for letting us know. We will update and warn the seller."
             onClose={handleCloseNotification}
           />
         )}

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import CheckoutNav from "@/components/Checkout/CheckoutNav";
-import ShoppingCart from "@/components/Customerpay/ShoppingCart";
+import ShoppingCart from "@/components/Customerpay/ShoppingCard";
 import Footer from "@/components/Shoppayment/Footer";
 
 const customerpay = () => {

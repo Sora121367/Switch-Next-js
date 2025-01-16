@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import CustomerHeader from "@/components/customerpage/CustomerHeader";
+import CusHeader from "@/components/customerpage/CusHeader";
 import CustomerSection from "@/components/customerpage/CustomerSection";
+import CustomerFooter from "@/components/customerpage/Footer";
 
 const CustomerPage = () => {
   const [products, setProducts] = useState([]);
@@ -53,16 +54,24 @@ const CustomerPage = () => {
   }
 
   return (
-    <div className="bg-[#1E1E1E] h-screen relative">
-      <CustomerHeader
-        category={category}
-        onCategoryChange={handleCategoryChange}
-      />
-      <div>
-        <CustomerSection products={filteredProducts} />
-      </div>
-    </div>
+    <>
+    <div className="bg-[#19341e] min-h-screen flex flex-col">
+  <CusHeader category={category} onCategoryChange={handleCategoryChange} />
+  {/* Main Content Section */}
+  <div className="flex-1">
+    <CustomerSection products={filteredProducts} />
+  </div>
+</div>
+<footer className="mt-auto">
+    <CustomerFooter />
+  </footer>
+</>
+
+
+
   );
 };
+
+
 
 export default CustomerPage;
